@@ -20,8 +20,7 @@ class Product(models.Model):
     name = models.CharField()
     description = models.TextField()
     nutriscore = models.CharField(max_length=1)
-    stores = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         """Print attribute as title's object in admin"""
@@ -32,8 +31,12 @@ class Favorite(models.Model):
     """Favorites products added by users"""
 
     # Fields
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE, related_name="favorites")
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE, realted_name="favorites_as_product")
+    substitute = models.ForeignKey(Product,
+                                   on_delete=models.CASCADE, realted_name="favorites_as_substitute")
 
     def __str__(self):
         """Print attribute as title's object in admin"""
