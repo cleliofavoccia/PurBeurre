@@ -3,7 +3,7 @@ by models with Open Food Facts datas"""
 
 import requests
 from django.core.management.base import BaseCommand, CommandError
-from pur_beurre.site_web.models import Category, Product
+from jean.site_web.models import Category, Product
 
 
 class FillDatabaseCommand(BaseCommand):
