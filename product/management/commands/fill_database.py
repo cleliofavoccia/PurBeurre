@@ -6,11 +6,11 @@ from django.core.management.base import BaseCommand, CommandError
 from product.models import Product, Category
 
 
-class FillDatabaseCommand(BaseCommand):
+class Command(BaseCommand):
     """Attributes and method useful for fill
     the database with Open Food Facts datas"""
 
-    def fetch_products_and_categories_from_OFF(self):
+    def handle(self, *args, **kwargs):
         """Fetch bests products on OFF"""
 
         request = requests.get('https://fr.openfoodfacts.org/?sort_by=popularity.json')
@@ -26,8 +26,6 @@ class FillDatabaseCommand(BaseCommand):
             # Save this new Product instance
             record_product.save()
 
-            # Get the Product instance recorded just before
-            product = Product.objects.get(name=response['products'][i]['product_name'])
             # Transform categories of Product instance in a list of categories
             categories = response['products'][i]['categories'].split(",")
 
@@ -38,8 +36,11 @@ class FillDatabaseCommand(BaseCommand):
                 # Save this new Category instance
                 record_category.save()
 
-                # Get the Category instance recorded just before
-                category = Category.objects.get(name=response['products'][i]['product_name'])
+                # Get the Product instance recorded just before
+                # product = Product.objects.filter(name=response['products'][i]['product_name'])
+
                 # Associate the Product instance recorded before with
                 # the Category instance recorded just before
-                product.entry_set.add(category)
+                record_product.categories.add(record_category)
+
+            self.stdout.write(self.style.SUCCESS('"%s" is successfully added' % response['products'][i]['product_name']))

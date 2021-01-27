@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Favorite(models.Model):
     """Favorites products added by users"""
 
