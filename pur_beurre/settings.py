@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'favorite.apps.FavoriteConfig',
     'user.apps.UserConfig',
     'product.apps.ProductConfig',
+    'django.contrib.staticfiles'
 ]
 
 MIDDLEWARE = [
@@ -131,6 +132,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR / "static")]
+
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
