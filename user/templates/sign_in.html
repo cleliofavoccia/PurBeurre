@@ -2,15 +2,11 @@
 
 {% load static %}
 
-{% block title %}Se connecter{% endblock title %}
+{% block title %}S'enregistrer{% endblock title %}
 
 <!-- Content-->
 {% block content %}
 <!-- Masthead-->
-
-{% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
 
 <header class="masthead-s">
     <div class="container">
@@ -26,17 +22,27 @@
     </div>
 </header>
 
-<form id="login" method="post" action="{% url 'login' %}" >
+<form id="sign_in" method="post" >
     {% csrf_token %}
     <div class="form-group">
     <label>Pseudonyme</label>
     {{ form.username }}
+        <small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
   </div>
     <div class="form-group">
     <label>Mot de Passe</label>
     {{ form.password }}
+        <small>Your password can’t be too similar to your other personal information.
+        Your password must contain at least 8 characters.
+        Your password can’t be a commonly used password.
+        Your password can’t be entirely numeric.</small>
+  </div>
+    <div class="form-group">
+    <label>Confirmation du mot de passe</label>
+    {{ form.email }}
+        <small>Réecrire le mot de passe.</small>
   </div>
 
-    <button type="submit" name="Connect User" class="btn btn-primary" value="login">Se connecter</button>
+    <button type="submit" name="Create User" class="btn btn-primary">S'inscrire</button>
 </form>
 {% endblock content %}
