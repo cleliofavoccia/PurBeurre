@@ -44,10 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django_extensions',
-    'site_web.apps.SiteWebConfig',
-    'favorite.apps.FavoriteConfig',
     'user.apps.UserConfig',
+    'site_web.apps.SiteWebConfig',
     'product.apps.ProductConfig',
+    'favorite.apps.FavoriteConfig',
     'django.contrib.staticfiles'
 ]
 

@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 
 from .models import CreateUserForm
 
@@ -21,6 +20,7 @@ def sign_in(request):
         form = CreateUserForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
+            # form.Meta.model.set_password(form.Meta.model, raw_password=request.POST['password'])
             form.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/')
