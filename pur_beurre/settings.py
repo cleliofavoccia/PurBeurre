@@ -44,10 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django_extensions',
-    'user.apps.UserConfig',
-    'site_web.apps.SiteWebConfig',
-    'product.apps.ProductConfig',
-    'favorite.apps.FavoriteConfig',
+    'users.apps.UserConfig',
+    'website.apps.SiteWebConfig',
+    'products.apps.ProductConfig',
+    'favorites.apps.FavoriteConfig',
     'django.contrib.staticfiles'
 ]
 
@@ -133,17 +133,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR / "static")]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'website:index'
 
-# Redirect to login if user non logged try to go in an restricted area
-LOGIN_URL = '/login'
+# Redirect to login if users non logged try to go in an restricted area
+LOGIN_URL = 'login'
 
 # To control e-mail in test environment
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Personnalised User
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'users.User'

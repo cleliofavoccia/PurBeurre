@@ -4,7 +4,7 @@ from django.shortcuts import render
 def index(request):
     """Print index.html in website"""
     context = None
-    return render(request, 'index.html', context)
+    return render(request, 'website/index.html', context)
 
 
 def legal_mentions(request):

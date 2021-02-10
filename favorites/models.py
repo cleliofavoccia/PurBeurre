@@ -12,16 +12,16 @@ class Favorite(models.Model):
         related_name="favorites")
 
     product = models.ForeignKey(
-        'product.Product',
+        'products.Product',
         on_delete=models.CASCADE,
         related_name="favorites_as_product",
     )
     substitute = models.ForeignKey(
-        'product.Product',
+        'products.Product',
         on_delete=models.CASCADE,
         related_name="favorites_as_substitute",
     )
 
     def __str__(self):
         """Print attribute as title's object in admin"""
-        return {'user': self.user, 'product': self.product}
+        return {'users': self.user, 'products': self.product}

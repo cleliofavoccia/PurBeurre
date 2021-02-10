@@ -10,7 +10,16 @@
 
 {% if form.errors %}
     <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    {% else %}
+      <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
 
 <header class="masthead-s">
     <div class="container">
@@ -25,18 +34,29 @@
         </div>
     </div>
 </header>
-
-<form id="login" method="post" action="{% url 'login' %}" >
-    {% csrf_token %}
-    <div class="form-group">
-    <label>Pseudonyme</label>
-    {{ form.username }}
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <form class="auth_form" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+        <label>Pseudonyme</label>
+        {{ form.username }}
+        </div>
+        <div class="form-group">
+        <label>Mot de passe</label>
+        {{ form.password }}
+        </div>
+        <input type="submit" class="btn btn-default btn-lg" value="Se connecter" />
+        <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+    </div>
+    <div class="col-sm">
+      <h3><a class="btn btn-default btn-lg" href="{% url 'users:sign_in' %}">Toujours pas inscrit ?</a></h3>
+    </div>
+    <div class="col-sm">
+        <p><a class="btn btn-default btn-lg" href="{% url 'password_reset' %}">Mot de passe perdu ?</a></p>
+    </div>
   </div>
-    <div class="form-group">
-    <label>Mot de Passe</label>
-    {{ form.password }}
-  </div>
-
-    <button type="submit" name="Connect User" class="btn btn-primary" value="login">Se connecter</button>
-</form>
+</div>
 {% endblock content %}

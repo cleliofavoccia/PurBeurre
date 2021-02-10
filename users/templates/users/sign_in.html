@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}S'enregistrer{% endblock title %}
+
+<!-- Content-->
+{% block content %}
+<!-- Masthead-->
+
+<header class="masthead-s">
+    <div class="container">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-11 align-self-end">
+                <h1 class="text-uppercase text-white font-weight-bold">Hello</h1>
+                <hr class="divider my-4" />
+            </div>
+            <div class="col-lg-8 align-self-baseline">
+                <h2 class="text-white-75 font-weight-light mb-5">Prêt à joindre la tribu ?</h2>
+            </div>
+        </div>
+    </div>
+</header>
+<!--<form id="sign_in" method="post">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form.as_ul }}-->
+<!--    <input type="submit" value="Submit">-->
+<!--</form>-->
+
+<form class="auth_form" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>Pseudonyme</label>
+        {{ form.username }}
+        <small>Requis. Moins de 150 caractères. Seulement des lettres, numéros et @/./+/-/_ </small>
+    </div>
+    <div class="form-group">
+        <label>Adresse email</label>
+        {{ form.email }}
+        <small>Optionnel.</small>
+    </div>
+    <div class="form-group">
+        <label>Mot de passe</label>
+        {{ form.password1 }}
+        <small>Il ne doit pas être similaire à vos autres informations.
+        Il doit contenir plus de 8 caractère.
+        Il ne peut pas être entièrement numérique.</small>
+    </div>
+    <div class="form-group">
+        <label>Confirmation du mot de passe</label>
+        {{ form.password2 }}
+        <small>Entrez le même mot de passe qu'avant pour vérification.</small>
+    </div>
+    <input class="btn btn-default btn-lg" type="submit" value="S'inscrire">
+</form>
+{% endblock content %}

@@ -3,7 +3,7 @@ by models with Open Food Facts datas"""
 
 import requests
 from django.core.management.base import BaseCommand, CommandError
-from product.models import Product, Category
+from products.models import Product, Category
 
 
 class Command(BaseCommand):
@@ -22,7 +22,10 @@ class Command(BaseCommand):
             # Record a new Product instance
             record_product = Product(name=response['products'][i]['product_name'],
                                      description=response['products'][i]['generic_name_fr'],
-                                     nutriscore=response['products'][i]['nutriscore_grade'])
+                                     nutriscore=response['products'][i]['nutriscore_grade'],
+                                     url=response['products'][i]['url'],
+                                     image_url=response['products'][i]['image_url'],
+                                     nutrition_image_url=response['products'][i]['image_nutrition_url'])
             # Save this new Product instance
             record_product.save()
 
@@ -37,7 +40,7 @@ class Command(BaseCommand):
                 record_category.save()
 
                 # Get the Product instance recorded just before
-                # product = Product.objects.filter(name=response['products'][i]['product_name'])
+                # products = Product.objects.filter(name=response['products'][i]['product_name'])
 
                 # Associate the Product instance recorded before with
                 # the Category instance recorded just before

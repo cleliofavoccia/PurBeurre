@@ -6,5 +6,5 @@ from .models import Favorite
 
 class FavoritebyUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing all products
-    added to favorite by an user"""
+    added to favorites by an users"""
     model = Favorite
