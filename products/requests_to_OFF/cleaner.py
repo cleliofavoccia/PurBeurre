@@ -20,4 +20,4 @@ class Cleaner:
         filtered_products = validator.filter(products)
         normalizer.normalize_all(filtered_products)
 
-        return products
+        return filtered_products

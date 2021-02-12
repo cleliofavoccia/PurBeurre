@@ -25,16 +25,11 @@ class ResultsListView(generic.ListView):
     model = Product
     paginate_by = 6
 
-    def get_queryset(self):
-        self.request = get_object_or_404(Product, name=self.kwargs['product'])
-        print(self.kwargs['product'])
-        return Product.objects.filter(request=self.request)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        product = Product.objects.filter(name__contains=self.request)[0]
-        # product = self.request
+        product = Product.objects.filter(name__contains=self.kwargs['product'])[0]
+
         context['base_product'] = product
 
         # Take the categories of the researched product
