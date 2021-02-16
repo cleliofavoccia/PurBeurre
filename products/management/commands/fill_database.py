@@ -35,7 +35,7 @@ class Command(BaseCommand):
             # Iterate on categories list
             for category in product['categories']:
                 # Record a new Category instance
-                record_category = Category.objects.create(name=category)
+                record_category, created = Category.objects.get_or_create(name=category)
                 # Save this new Category instance
                 record_category.save()
 

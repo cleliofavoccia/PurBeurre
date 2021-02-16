@@ -5,7 +5,7 @@ class Category(models.Model):
     """Categories of products"""
 
     # Fields
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         """Print attribute as title's object in admin"""

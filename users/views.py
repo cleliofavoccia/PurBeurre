@@ -29,21 +29,3 @@ class SignIn(View):
                 return redirect('website:index')
             else:
                 return render(request, 'users/sign_in.html', {'form': form})
-
-
-# def sign_in(request):
-#     form = CreateUserForm()
-#     # if this is a POST request we need to process the form data
-#     if request.method == 'POST':
-#         # create a form instance and populate it with data from the request:
-#         form = CreateUserForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             form.save()
-#             # redirect to a new URL:
-#             return redirect('website:index')
-#     # if this is a GET request we need to print form
-#     else:
-#         form = CreateUserForm()
-#
-#     return render(request, 'users/sign_in.html', {'form': form})

@@ -1,6 +1,6 @@
 from django.views import generic
 from django.db.models import Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 
 from .models import Category, Product
 
@@ -23,27 +23,34 @@ class ProductDetailView(generic.DetailView):
 class ResultsListView(generic.ListView):
     """Generic class-based view listing all products by nutriscore"""
     model = Product
-    paginate_by = 6
+    template_name = 'products/results.html'
 
     def get_context_data(self, **kwargs):
+        search_product = self.request.GET.get('research')
+
         context = super().get_context_data(**kwargs)
 
-        product = Product.objects.filter(name__contains=self.kwargs['product'])[0]
+        list_product = Product.objects.filter(name__icontains=search_product)
 
-        context['base_product'] = product
+        if not list_product:
+            context['base_product'] = 'Oups !'
+        else:
+            product = list_product[0]
+            context['base_product'] = product
 
-        # Take the categories of the researched product
-        product_categories = product.categories.all()
+            # Take the categories of the researched product
+            product_categories = product.categories.all()
 
-        products = Product.objects.filter(nutriscore__lt=product.nutriscore)
+            products = Product.objects.filter(nutriscore__lt=product.nutriscore)
 
-        # Return all the objects of the categories of the researched product order by nutriscore
-        context['results'] = (
-            products.filter(categories__in=product_categories)
-            .order_by('nutriscore')
-            .annotate(num_product_same_category=Count('product'))
-        )
+            # Return all the objects of the categories of the researched product order by nutriscore
+            context['results'] = (
+                products.filter(categories__in=product_categories)
+                .annotate(num_categories_share_with_product=Count('categories'))
+                .order_by('num_categories_share_with_product')
+                .order_by('nutriscore')
+            )
+
+            return context
 
         return context
-
-

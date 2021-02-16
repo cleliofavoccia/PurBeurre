@@ -30,11 +30,11 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
                         <li class="nav-item">
-                            <form method="post" action="">
-                            <input id="research" type="text" placeholder="Chercher" value="nutella"/>
+                            <form method="get" action="{% url 'products:results' %}">
+                            {{ substitute_form }}
                             </form>
                         </li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'favorites:my_favorites' %}">
                             <i class="fas fa-carrot"></i>
                         </a>
                         </li>
