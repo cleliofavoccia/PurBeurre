@@ -24,4 +24,4 @@ class Favorite(models.Model):
 
     def __str__(self):
         """Print attribute as title's object in admin"""
-        return {'users': self.user, 'products': self.product}
+        return {'user': self.user, 'product': self.substitute}
