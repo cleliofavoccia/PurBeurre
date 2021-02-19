@@ -7,9 +7,10 @@ from django.core.exceptions import ValidationError
 
 
 class FavoriteForm(forms.Form):
+    product = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+    substitute = forms.IntegerField(widget=forms.HiddenInput(), required=True)
 
     def clean_product(self):
-        print(self.cleaned_data)
         product_id = self.cleaned_data['product']
         try:
             product = Product.objects.get(id=product_id)
@@ -28,12 +29,11 @@ class FavoriteForm(forms.Form):
         return substitute
 
     def save(self, request, commit=True):
-        print(self.cleaned_data)
         product = self.cleaned_data['product']
         substitute = self.cleaned_data['substitute']
-        favorite = Favorite(user=request.user,
-                            product=product,
-                            substitute=substitute)
+        favorite = Favorite(
+            user=request.user, product=product, substitute=substitute
+        )
         if commit:
             favorite.save()
         return favorite
