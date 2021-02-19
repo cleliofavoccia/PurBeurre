@@ -46,5 +46,5 @@ class FavoriteModelTest(TestCase):
         favorite = Favorite.objects.get(id=1)
         user = User.objects.get(id=1)
         substitute = Product.objects.get(id=2)
-        expected_objet_name = {'user': user, 'product': substitute}
+        expected_objet_name = '%s, %s' % (user.username, substitute.name)
         self.assertEqual(expected_objet_name, str(favorite))
