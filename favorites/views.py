@@ -1,37 +1,54 @@
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render
 
+from .forms import FavoriteForm
 from .models import Favorite
+from products.models import Product
 
 
-class FavoriteCreateView(LoginRequiredMixin, generic.View):
-    """Generic class-based view listing all products
-    added to favorites by an users"""
+class FavoriteListView(LoginRequiredMixin, generic.ListView):
     model = Favorite
     template_name = 'favorites/favoritebyuser_list.html'
 
-    def post(self, request):
-        if request.method == 'POST':
-            print(self.request.POST)
-            base_product = self.request.POST['base_product']
-            substitute = self.request.POST['substitute']
-            user = self.request.POST['user']
-
-            favorite = Favorite(user=user, product=base_product, substitute=substitute)
-            favorite.save()
-
-    def get_context_data(self, request, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if context['object_list']:
-            base_product = self.request.POST['base_product']
-            substitute = self.request.POST['substitute']
-            user = self.request.POST['user']
-            context['base_product'] = base_product
-            context['substitute'] = substitute
-            context['user'] = user
+        list_favorites = Favorite.objects.filter(user=self.request.user)
 
-            return context
-        else:
-            context['base_product'] = 'Tu n\'as rien enregistré !'
-            return context
+        context['list_favorites'] = list_favorites
+
+        return context
+
+
+class FavoriteCreateView(LoginRequiredMixin, generic.View):
+    """Generic class-based view to add Favorite objects in
+    database"""
+
+    def post(self, request):
+        form = FavoriteForm(request.POST)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save(request)
+            return redirect('favorites:well_done')
+        return redirect('favorites:fail')
+
+
+class WellDoneView(LoginRequiredMixin, generic.View):
+    """Generic class-based view listing to
+    print favorite well added to database"""
+
+    def get(self, request):
+        context = {'msg_welldone': 'Produit ajouté à vos favoris !'}
+
+        return render(request, 'favorites/well_done.html', context)
+
+
+class FailView(LoginRequiredMixin, generic.View):
+    """Generic class-based view listing to
+    print favorite well added to database"""
+
+    def get(self, request):
+        context = {'msg_fail': 'Produit pas ajouté à vos favoris !'}
+
+        return render(request, 'favorites/fail.html', context)
