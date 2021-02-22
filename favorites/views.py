@@ -13,11 +13,11 @@ class FavoriteListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        print(self.request)
         list_favorites = Favorite.objects.filter(user=self.request.user)
 
         context['list_favorites'] = list_favorites
-
+        print(context['list_favorites'])
         return context
 
 
@@ -26,7 +26,6 @@ class FavoriteCreateView(LoginRequiredMixin, generic.View):
     database"""
 
     def post(self, request):
-        print(request.POST)
         form = FavoriteForm(request.POST)
         if form.is_valid():
             form.save(request)

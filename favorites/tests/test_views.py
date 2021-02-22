@@ -1,6 +1,9 @@
+
 from django.test import TestCase
 from django.urls import reverse
 
+from products.models import Product, Category
+from favorites.models import Favorite
 from users.models import User
 
 
@@ -11,6 +14,65 @@ class FavoriteListViewTest(TestCase):
         # Create one user
         test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
         test_user1.save()
+
+        pate_a_tartiner = Category.objects.create(name='pate a tartiner')
+        chocolat = Category.objects.create(name='chocolat')
+        noisette = Category.objects.create(name='noisette')
+
+        nutella = Product.objects.create(
+            name='nutella',
+            description='pate a tartiner au chocolat'
+                        'et a la noisette',
+            nutriscore='d',
+            url='https://fr.openfoodfacts.org/produit/8000500217078/'
+                'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
+            image_url='https://static.openfoodfacts.org/images/products/'
+                      '800/050/021/7078/front_fr.63.400.jpg',
+            nutrition_image_url='https://static.openfoodfacts.org/images/products'
+                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+        )
+
+        muesli = Product.objects.create(
+            name='muesli sans sucre ajouté* bio',
+            description='pate a tartiner au chocolat'
+                        'et a la noisette',
+            nutriscore='d',
+            url='https://fr.openfoodfacts.org/produit/8000500217078/'
+                'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
+            image_url='https://static.openfoodfacts.org/images/products/'
+                      '800/050/021/7078/front_fr.63.400.jpg',
+            nutrition_image_url='https://static.openfoodfacts.org/images/products'
+                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+        )
+
+        biscotte = Product.objects.create(
+            name='biscotte equilibrees',
+            description='pate a tartiner au chocolat'
+                        'et a la noisette',
+            nutriscore='d',
+            url='https://fr.openfoodfacts.org/produit/8000500217078/'
+                'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
+            image_url='https://static.openfoodfacts.org/images/products/'
+                      '800/050/021/7078/front_fr.63.400.jpg',
+            nutrition_image_url='https://static.openfoodfacts.org/images/products'
+                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+        )
+
+        nutella.categories.add(pate_a_tartiner, chocolat, noisette)
+        muesli.categories.add(chocolat, noisette)
+        biscotte.categories.add(chocolat, noisette)
+
+        Favorite.objects.create(
+            user=User.objects.get(username='testuser1'),
+            product=Product.objects.get(name='nutella'),
+            substitute=Product.objects.get(name='muesli sans sucre ajouté* bio')
+        )
+
+        Favorite.objects.create(
+            user=User.objects.get(username='testuser1'),
+            product=Product.objects.get(name='nutella'),
+            substitute=Product.objects.get(name='biscotte equilibrees')
+        )
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('my_favorites'))
@@ -45,8 +107,18 @@ class FavoriteListViewTest(TestCase):
 
         self.assertTemplateUsed(response, 'favorites/favoritebyuser_list.html')
 
-    #Tester que si la liste est vide, cela renvoi "vous n'avez pas de substituts"
-    # ce qui est fait actuellement dans le html?
+    def test_view_return_datas(self):
+        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
+        response = self.client.post(
+                             reverse('my_favorites'),
+                             kwargs='testuser1'
+        )
+        favorite_by_user_list = response.context['results']
+
+        # Check our user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+
+        self.assertEqual(favorite_by_user_list, Favorite.objects.all())
 
 
 class FavoriteCreateViewTest(TestCase):
@@ -88,7 +160,7 @@ class FavoriteCreateViewTest(TestCase):
         false_request = {
             'csrfmiddlewaretoken':
             ['ZP1J9xryqNyYWMUCKigTsb2g8PeLxZgjuS0y0NYUquChRUx6OhtWgDycSdv1XTwe'],
-            'product': ['X'],
+            'product': ['1'],
             'substitute': ['Y']
                         }
         false_response = self.client.post(reverse('add_favorites'), kwargs=false_request)

@@ -13,23 +13,23 @@ class FavoriteModelTest(TestCase):
         user = User.objects.create(username='jean', password='hiuehfkdshk')
         favorite = Favorite.objects.create(user=user, product=product, substitute=substitute)
 
-    # def test_favorite_has_product(self):
-    #     favorite = Favorite.objects.get(id=1)
-    #     product = Product.objects.get(id=1)
-    #     favorite_product = Favorite.objects.get(product=product)
-    #     self.assertEqual(favorite, favorite_product)
-    #
-    # def test_favorite_has_substitute(self):
-    #     favorite = Favorite.objects.get(id=1)
-    #     substitute = Product.objects.get(id=2)
-    #     favorite_substitute = Favorite.objects.get(substitute=substitute)
-    #     self.assertEqual(favorite, favorite_substitute)
-    #
-    # def test_favorite_has_user(self):
-    #     favorite = Favorite.objects.get(id=1)
-    #     user = User.objects.get(id=1)
-    #     favorite_user = Favorite.objects.get(user=user)
-    #     self.assertEqual(favorite, favorite_user)
+    def test_favorite_has_product(self):
+        favorite = Favorite.objects.get(id=1)
+        product = Product.objects.get(id=1)
+        favorite_product = Favorite.objects.get(product=product)
+        self.assertEqual(favorite, favorite_product)
+
+    def test_favorite_has_substitute(self):
+        favorite = Favorite.objects.get(id=1)
+        substitute = Product.objects.get(id=2)
+        favorite_substitute = Favorite.objects.get(substitute=substitute)
+        self.assertEqual(favorite, favorite_substitute)
+
+    def test_favorite_has_user(self):
+        favorite = Favorite.objects.get(id=1)
+        user = User.objects.get(id=1)
+        favorite_user = Favorite.objects.get(user=user)
+        self.assertEqual(favorite, favorite_user)
 
     def test_delete_favorite_not_delete_user_and_products(self):
         favorite = Favorite.objects.get(id=1)

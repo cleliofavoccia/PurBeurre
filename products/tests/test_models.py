@@ -1,34 +1,103 @@
 from django.test import TestCase
 
-from favorites.models import Favorite
 from products.models import Product, Category
-from users.models import User
 
 
 class ProductModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        product = Product.objects.create(name='nutella')
-        substitute = Product.objects.create(name='pâte de noisette bio')
-        user = User.objects.create(username='jean', password='hiuehfkdshk')
-        favorite = Favorite.objects.create(user=user, product=product, substitute=substitute)
+        # Set up non-modified objects used by all test methods
+        Product.objects.create(
+            name='nutella',
+            description='pate a tartiner au chocolat'
+                       'et a la noisette',
+            nutriscore='e',
+            categories='pate a tartiner, chocolat, noisette',
+            url='https://fr.openfoodfacts.org/produit/8000500217078/'
+               'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
+            image_url='https://static.openfoodfacts.org/images/products/'
+                     '800/050/021/7078/front_fr.63.400.jpg',
+            nutrition_image_url='https://static.openfoodfacts.org/images/products'
+                               '/800/050/021/7078/nutrition_fr.64.400.jpg'
+        )
 
-    def test_object_name_is_product_name(self):
+    def test_name_label(self):
         product = Product.objects.get(id=1)
-        expected_objet_name = product.name
-        self.assertEqual(expected_objet_name, str(product))
+        field_label = product._meta.get_field('name').verbose_name
+        self.assertEqual(field_label, 'product name')
+
+    def test_description_label(self):
+        product = Product.objects.get(id=1)
+        field_label = product._meta.get_field('description').verbose_name
+        self.assertEqual(field_label, 'product description')
+
+    def test_nutriscore_label(self):
+        product = Product.objects.get(id=1)
+        field_label = product._meta.get_field('nutriscore').verbose_name
+        self.assertEqual(field_label, 'product nutriscore')
+
+    def test_categories_label(self):
+        product = Product.objects.get(id=1)
+        field_label = product._meta.get_field('categories').verbose_name
+        self.assertEqual(field_label, 'Categories')
+
+    def test_url_label(self):
+        product = Product.objects.get(id=1)
+        field_label = product._meta.get_field('url').verbose_name
+        self.assertEqual(field_label, 'product url')
+
+    def test_image_url_label(self):
+        product = Product.objects.get(id=1)
+        field_label = product._meta.get_field('image_url').verbose_name
+        self.assertEqual(field_label, 'product image url')
+
+    def test_nutrition_image_url_label(self):
+        product = Product.objects.get(id=1)
+        field_label = product._meta.get_field('nutrition_image_url').verbose_name
+        self.assertEqual(field_label, 'product nutrition image url')
+
+    def test_name_max_length(self):
+        product = Product.objects.get(id=1)
+        max_length = product._meta.get_field('name').max_length
+        self.assertEqual(max_length, 100)
+
+    def test_nutriscore_max_length(self):
+        product = Product.objects.get(id=1)
+        max_length = product._meta.get_field('nutriscore').max_length
+        self.assertEqual(max_length, 1)
+
+    def test_categories_related_name(self):
+        product = Product.objects.get(id=1)
+        related_name = product._meta.get_field('categories').related_name
+        self.assertEqual(related_name, 'products')
+
+    def test_object_name_is_name(self):
+        product = Product.objects.get(id=1)
+        expected_object_name = product.name
+        self.assertEqual(expected_object_name, str(product))
+
+    # def test_get_absolute_url(self):
+    #     author = Author.objects.get(id=1)
+    #     # This will also fail if the urlconf is not defined.
+    #     self.assertEqual(author.get_absolute_url(), '/catalog/author/1')
 
 
 class CategoryModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        category = Category.objects.create(name='pate a tartiner')
-        product = Product.objects.create(name='nutella')
-        substitute = Product.objects.create(name='pâte de noisette bio')
-        user = User.objects.create(username='jean', password='hiuehfkdshk')
-        favorite = Favorite.objects.create(user=user, product=product, substitute=substitute)
+        Category.objects.create(name='pate a tartiner')
 
-    def test_object_name_is_product_name(self):
+    def test_object_name_is_category_name(self):
         category = Category.objects.get(id=1)
         expected_objet_name = category.name
         self.assertEqual(expected_objet_name, str(category))
+
+    def test_name_max_length(self):
+        product = Product.objects.get(id=1)
+        max_length = product._meta.get_field('name').max_length
+        self.assertEqual(max_length, 100)
+
+    def test_name_is_unique(self):
+        product = Product.objects.get(id=1)
+        unique = product._meta.get_field('name').unique
+        self.assertTrue(unique)
