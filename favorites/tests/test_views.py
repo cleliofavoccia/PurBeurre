@@ -12,8 +12,8 @@ class FavoriteListViewTest(TestCase):
 
     def setUp(self):
         # Create one user
-        test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
-        test_user1.save()
+        self.test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
+        self.test_user1.save()
 
         pate_a_tartiner = Category.objects.create(name='pate a tartiner')
         chocolat = Category.objects.create(name='chocolat')
@@ -75,48 +75,48 @@ class FavoriteListViewTest(TestCase):
         )
 
     def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('my_favorites'))
-        self.assertRedirects(response, 'users/login/?next=/favorites/myfavorites/')
+        response = self.client.get(reverse('favorites:my_favorites'))
+        self.assertRedirects(response, f'{reverse("login")}?next={reverse("favorites:my_favorites")}')
 
     def test_view_url_redirect_at_desired_location(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get('/favorites/myfavorites/')
+        login = self.client.force_login(self.test_user1)
+        response = self.client.get(reverse('favorites:my_favorites'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
     def test_view_url_accessible_by_name(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('my_favorites'))
+        login = self.client.force_login(self.test_user1)
+        response = self.client.get(reverse('favorites:my_favorites'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('my_favorites'))
+        login = self.client.force_login(self.test_user1)
+        response = self.client.get(reverse('favorites:my_favorites'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
         self.assertTemplateUsed(response, 'favorites/favoritebyuser_list.html')
 
     def test_view_return_datas(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
+        login = self.client.force_login(self.test_user1)
         response = self.client.post(
-                             reverse('my_favorites'),
+                             reverse('favorites:my_favorites'),
                              kwargs='testuser1'
         )
         favorite_by_user_list = response.context['results']
 
         # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
         self.assertEqual(favorite_by_user_list, Favorite.objects.all())
 
@@ -125,37 +125,37 @@ class FavoriteCreateViewTest(TestCase):
 
     def setUp(self):
         # Create one user
-        test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
-        test_user1.save()
+        self.test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
+        self.test_user1.save()
 
     def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('add_favorites'))
-        self.assertRedirects(response, 'users/login/?next=/favorites/addfavorites/')
+        response = self.client.get(reverse('favorites:add_favorites'))
+        self.assertRedirects(response, f'{reverse("login")}?next={reverse("favorites:add_favorites")}')
 
     def test_view_url_accessible_by_name(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('add_favorites'))
+        login = self.client.force_login(self.test_user1)
+        response = self.client.get(reverse('favorites:add_favorites'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
     def test_view_verify_datas_with_form(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-
+        login = self.client.force_login(self.test_user1)
         true_request = {
             'csrfmiddlewaretoken':
             ['ZP1J9xryqNyYWMUCKigTsb2g8PeLxZgjuS0y0NYUquChRUx6OhtWgDycSdv1XTwe'],
             'product': ['1'],
             'substitute': ['2']
                         }
-        true_response = self.client.post(reverse('add_favorites'), kwargs=true_request)
+        true_response = self.client.post(reverse('favorites:add_favorites'),
+                                         kwargs=true_request)
 
         # Check our user is logged in
-        self.assertEqual(str(true_response.context['user']), 'testuser1')
+        self.assertEqual(true_response.context['user'].username, 'testuser1')
 
-        self.assertRedirects(true_response, '/favorites/welldone/')
+        self.assertRedirects(true_response, 'favorites:well_done')
 
         false_request = {
             'csrfmiddlewaretoken':
@@ -163,69 +163,71 @@ class FavoriteCreateViewTest(TestCase):
             'product': ['1'],
             'substitute': ['Y']
                         }
-        false_response = self.client.post(reverse('add_favorites'), kwargs=false_request)
+        false_response = self.client.post(reverse('favorites:add_favorites'),
+                                          kwargs=false_request)
 
         # Check our user is logged in
-        self.assertEqual(str(false_response.context['user']), 'testuser1')
+        self.assertEqual(true_response.context['user'].username, 'testuser1')
 
-        self.assertRedirects(false_response, '/favorites/fail/')
+        self.assertRedirects(false_response, 'favorites:fail')
 
 
 class WellDoneViewTest(TestCase):
 
     def setUp(self):
         # Create one user
-        test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
-        test_user1.save()
+        self.test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
+        self.test_user1.save()
 
     def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('well_done'))
-        self.assertRedirects(response, 'users/login/?next=/favorites/welldone/')
+        response = self.client.get(reverse('favorites:well_done'))
+        self.assertRedirects(response, f'{reverse("login")}?next={reverse("favorites:well_done")}')
+        # response['Location']
 
     def test_view_url_redirect_at_desired_location(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get('/favorites/welldone/')
+        login = self.client.force_login(self.test_user1)
+        response = self.client.get(reverse('favorites:well_done'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['msg_welldone'], 'Produit ajouté à vos favoris !')
 
     def test_view_url_accessible_by_name(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('well_done'))
+        response = self.client.get(reverse('favorites:well_done'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
 
 class FailViewTest(TestCase):
 
     def setUp(self):
         # Create one user
-        test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
-        test_user1.save()
+        self.test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
+        self.test_user1.save()
 
     def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('fail'))
-        self.assertRedirects(response, 'users/login/?next=/favorites/fail/')
+        response = self.client.get(reverse('favorites:fail'))
+        self.assertRedirects(response, f'{reverse("login")}?next={reverse("favorites:fail")}')
 
     def test_view_url_redirect_at_desired_location(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get('/favorites/fail/')
+        login = self.client.force_login(self.test_user1)
+        response = self.client.get(reverse('favorites:fail'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
     def test_view_url_accessible_by_name(self):
-        login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('fail'))
+        login = self.client.force_login(self.test_user1)
+        response = self.client.get(reverse('favorites:fail'))
 
-        # Check our user is logged in
-        self.assertEqual(str(response.context['user']), 'testuser1')
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
+        # Check our user is logged in
+        self.assertEqual(response.context['user'].username, 'testuser1')
