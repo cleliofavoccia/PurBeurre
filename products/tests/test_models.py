@@ -6,13 +6,16 @@ from products.models import Product, Category
 class ProductModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        pate_a_tartiner = Category.objects.create(name='pate a tartiner')
+        chocolat = Category.objects.create(name='chocolat')
+        noisette = Category.objects.create(name='noisette')
+
         # Set up non-modified objects used by all test methods
-        Product.objects.create(
+        nutella = Product.objects.create(
             name='nutella',
             description='pate a tartiner au chocolat'
-                       'et a la noisette',
+                        'et a la noisette',
             nutriscore='e',
-            categories='pate a tartiner, chocolat, noisette',
             url='https://fr.openfoodfacts.org/produit/8000500217078/'
                'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
             image_url='https://static.openfoodfacts.org/images/products/'
@@ -21,58 +24,60 @@ class ProductModelTest(TestCase):
                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
         )
 
+        nutella.categories.add(pate_a_tartiner, chocolat, noisette)
+
     def test_name_label(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         field_label = product._meta.get_field('name').verbose_name
         self.assertEqual(field_label, 'product name')
 
     def test_description_label(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         field_label = product._meta.get_field('description').verbose_name
         self.assertEqual(field_label, 'product description')
 
     def test_nutriscore_label(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         field_label = product._meta.get_field('nutriscore').verbose_name
         self.assertEqual(field_label, 'product nutriscore')
 
     def test_categories_label(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         field_label = product._meta.get_field('categories').verbose_name
-        self.assertEqual(field_label, 'Categories')
+        self.assertEqual(field_label, 'categories')
 
     def test_url_label(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         field_label = product._meta.get_field('url').verbose_name
         self.assertEqual(field_label, 'product url')
 
     def test_image_url_label(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         field_label = product._meta.get_field('image_url').verbose_name
         self.assertEqual(field_label, 'product image url')
 
     def test_nutrition_image_url_label(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         field_label = product._meta.get_field('nutrition_image_url').verbose_name
         self.assertEqual(field_label, 'product nutrition image url')
 
     def test_name_max_length(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         max_length = product._meta.get_field('name').max_length
         self.assertEqual(max_length, 100)
 
     def test_nutriscore_max_length(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         max_length = product._meta.get_field('nutriscore').max_length
         self.assertEqual(max_length, 1)
 
     def test_categories_related_name(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         related_name = product._meta.get_field('categories').related_name
         self.assertEqual(related_name, 'products')
 
     def test_object_name_is_name(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         expected_object_name = product.name
         self.assertEqual(expected_object_name, str(product))
 
@@ -88,16 +93,16 @@ class CategoryModelTest(TestCase):
         Category.objects.create(name='pate a tartiner')
 
     def test_object_name_is_category_name(self):
-        category = Category.objects.get(id=1)
+        category = Category.objects.get(name='pate a tartiner')
         expected_objet_name = category.name
         self.assertEqual(expected_objet_name, str(category))
 
     def test_name_max_length(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         max_length = product._meta.get_field('name').max_length
         self.assertEqual(max_length, 100)
 
     def test_name_is_unique(self):
-        product = Product.objects.get(id=1)
+        product = Product.objects.get(name='nutella')
         unique = product._meta.get_field('name').unique
         self.assertTrue(unique)

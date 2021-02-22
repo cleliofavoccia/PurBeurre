@@ -113,7 +113,7 @@ class FavoriteListViewTest(TestCase):
                              reverse('favorites:my_favorites'),
                              kwargs='testuser1'
         )
-        favorite_by_user_list = response.context['results']
+        favorite_by_user_list = response.context['list_favorites']
 
         # Check our user is logged in
         self.assertEqual(response.context['user'].username, 'testuser1')
@@ -134,10 +134,14 @@ class FavoriteCreateViewTest(TestCase):
 
     def test_view_url_accessible_by_name(self):
         login = self.client.force_login(self.test_user1)
-        response = self.client.get(reverse('favorites:add_favorites'))
+        product = Product.objects.get(name='nutella')
+        substitute = Product.objects.get(name='muesli sans sucre ajouté* bio')
+
+        response = self.client.post(reverse('favorites:add_favorites'),
+                                    data={'product': product.id, 'substitute': substitute.id})
 
         # Check that we got a response "success"
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         # Check our user is logged in
         self.assertEqual(response.context['user'].username, 'testuser1')
 
@@ -198,7 +202,7 @@ class WellDoneViewTest(TestCase):
         response = self.client.get(reverse('favorites:well_done'))
 
         # Check that we got a response "success"
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         # Check our user is logged in
         self.assertEqual(response.context['user'].username, 'testuser1')
 
