@@ -109,7 +109,7 @@ class FavoriteListViewTest(TestCase):
 
     def test_view_return_datas(self):
         login = self.client.force_login(self.test_user1)
-        response = self.client.post(
+        response = self.client.get(
                              reverse('favorites:my_favorites'),
                              kwargs='testuser1'
         )
@@ -127,6 +127,39 @@ class FavoriteCreateViewTest(TestCase):
         # Create one user
         self.test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
         self.test_user1.save()
+
+        pate_a_tartiner = Category.objects.create(name='pate a tartiner')
+        chocolat = Category.objects.create(name='chocolat')
+        noisette = Category.objects.create(name='noisette')
+
+        nutella = Product.objects.create(
+            name='nutella',
+            description='pate a tartiner au chocolat'
+                        'et a la noisette',
+            nutriscore='d',
+            url='https://fr.openfoodfacts.org/produit/8000500217078/'
+                'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
+            image_url='https://static.openfoodfacts.org/images/products/'
+                      '800/050/021/7078/front_fr.63.400.jpg',
+            nutrition_image_url='https://static.openfoodfacts.org/images/products'
+                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+        )
+
+        muesli = Product.objects.create(
+            name='muesli sans sucre ajouté* bio',
+            description='pate a tartiner au chocolat'
+                        'et a la noisette',
+            nutriscore='d',
+            url='https://fr.openfoodfacts.org/produit/8000500217078/'
+                'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
+            image_url='https://static.openfoodfacts.org/images/products/'
+                      '800/050/021/7078/front_fr.63.400.jpg',
+            nutrition_image_url='https://static.openfoodfacts.org/images/products'
+                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+        )
+
+        nutella.categories.add(pate_a_tartiner, chocolat, noisette)
+        muesli.categories.add(chocolat, noisette)
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('favorites:add_favorites'))
@@ -147,17 +180,16 @@ class FavoriteCreateViewTest(TestCase):
 
     def test_view_verify_datas_with_form(self):
         login = self.client.force_login(self.test_user1)
+        product = Product.objects.get(name='nutella')
+        substitute = Product.objects.get(name='muesli sans sucre ajouté* bio')
         true_request = {
             'csrfmiddlewaretoken':
             ['ZP1J9xryqNyYWMUCKigTsb2g8PeLxZgjuS0y0NYUquChRUx6OhtWgDycSdv1XTwe'],
-            'product': ['1'],
-            'substitute': ['2']
+            'product': [product.id],
+            'substitute': [substitute.id]
                         }
         true_response = self.client.post(reverse('favorites:add_favorites'),
                                          kwargs=true_request)
-
-        # Check our user is logged in
-        self.assertEqual(true_response.context['user'].username, 'testuser1')
 
         self.assertRedirects(true_response, 'favorites:well_done')
 
