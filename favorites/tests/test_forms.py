@@ -50,15 +50,12 @@ class FavoriteFormTest(TestCase):
         Favorite.objects.create(user=self.test_user1, product=nutella, substitute=muesli)
 
     def test_favorite_form_work_with_existant_products(self):
-        login = self.client.force_login(self.test_user1)
         product = Product.objects.get(name='nutella')
         substitute = Product.objects.get(name='muesli sans sucre ajouté* bio')
 
         form = FavoriteForm(data={
-            'csrfmiddlewaretoken':
-                ['d25yDUumTlBlHNkj9sHM5IBS5pE9DfaoUbaZcxrsq4xeq2KTyCe4AnD1ucGXokIO'],
-            'product': [product.id],
-            'substitute': [substitute.id]
+            'product': product.id,
+            'substitute': substitute.id
         })
         self.assertTrue(form.is_valid())
 
@@ -66,30 +63,24 @@ class FavoriteFormTest(TestCase):
         product = Product.objects.get(name='nutella')
         substitute = 'y'
         form = FavoriteForm(data={
-            'csrfmiddlewaretoken':
-                ['d25yDUumTlBlHNkj9sHM5IBS5pE9DfaoUbaZcxrsq4xeq2KTyCe4AnD1ucGXokIO'],
-            'product': [product.id],
-            'substitute': [substitute]
+            'product': product.id,
+            'substitute': substitute
         })
         self.assertFalse(form.is_valid())
 
         product = 'x'
         substitute = 'y'
         form = FavoriteForm(data={
-            'csrfmiddlewaretoken':
-                ['d25yDUumTlBlHNkj9sHM5IBS5pE9DfaoUbaZcxrsq4xeq2KTyCe4AnD1ucGXokIO'],
-            'product': [product],
-            'substitute': [substitute]
+            'product': product,
+            'substitute': substitute
         })
         self.assertFalse(form.is_valid())
 
         product = 'x'
         substitute = Product.objects.get(name='muesli sans sucre ajouté* bio')
         form = FavoriteForm(data={
-            'csrfmiddlewaretoken':
-                ['d25yDUumTlBlHNkj9sHM5IBS5pE9DfaoUbaZcxrsq4xeq2KTyCe4AnD1ucGXokIO'],
-            'product': [product],
-            'substitute': [substitute.id]
+            'product': product,
+            'substitute': substitute.id
         })
         self.assertFalse(form.is_valid())
 
@@ -98,13 +89,11 @@ class FavoriteFormTest(TestCase):
 
         product = Product.objects.get(name='nutella')
         substitute = Product.objects.get(name='muesli sans sucre ajouté* bio')
-        favorite = Favorite.objects.get(id=1)
         data = {
-            'csrfmiddlewaretoken':
-                ['d25yDUumTlBlHNkj9sHM5IBS5pE9DfaoUbaZcxrsq4xeq2KTyCe4AnD1ucGXokIO'],
-            'product': [product.id],
-            'substitute': [substitute.id]
+            'product': product.id,
+            'substitute': substitute.id
         }
         form = FavoriteForm(data=data)
-        request = self.client.post('favorites:add_favorites', data=data)
-        self.assertEqual(request, favorite.id)
+        form.is_valid()
+        favorite = form.save(self.test_user1)
+        self.assertEqual(favorite, Favorite.objects.get(id=favorite.id))

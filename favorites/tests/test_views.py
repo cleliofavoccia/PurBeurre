@@ -111,14 +111,10 @@ class FavoriteListViewTest(TestCase):
         login = self.client.force_login(self.test_user1)
         response = self.client.get(
                              reverse('favorites:my_favorites'),
-                             kwargs='testuser1'
         )
         favorite_by_user_list = response.context['list_favorites']
-
-        # Check our user is logged in
-        self.assertEqual(response.context['user'].username, 'testuser1')
-
-        self.assertEqual(favorite_by_user_list, Favorite.objects.all())
+        for favorites in zip(favorite_by_user_list, Favorite.objects.filter(user=self.test_user1)):
+            self.assertEqual(favorites[0], favorites[1])
 
 
 class FavoriteCreateViewTest(TestCase):
@@ -175,37 +171,28 @@ class FavoriteCreateViewTest(TestCase):
 
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 302)
-        # Check our user is logged in
-        self.assertEqual(response.context['user'].username, 'testuser1')
 
     def test_view_verify_datas_with_form(self):
         login = self.client.force_login(self.test_user1)
         product = Product.objects.get(name='nutella')
         substitute = Product.objects.get(name='muesli sans sucre ajouté* bio')
         true_request = {
-            'csrfmiddlewaretoken':
-            ['ZP1J9xryqNyYWMUCKigTsb2g8PeLxZgjuS0y0NYUquChRUx6OhtWgDycSdv1XTwe'],
-            'product': [product.id],
-            'substitute': [substitute.id]
+            'product': product.id,
+            'substitute': substitute.id
                         }
         true_response = self.client.post(reverse('favorites:add_favorites'),
-                                         kwargs=true_request)
+                                         data=true_request)
 
-        self.assertRedirects(true_response, 'favorites:well_done')
+        self.assertRedirects(true_response, reverse('favorites:well_done'))
 
         false_request = {
-            'csrfmiddlewaretoken':
-            ['ZP1J9xryqNyYWMUCKigTsb2g8PeLxZgjuS0y0NYUquChRUx6OhtWgDycSdv1XTwe'],
             'product': ['1'],
             'substitute': ['Y']
                         }
         false_response = self.client.post(reverse('favorites:add_favorites'),
-                                          kwargs=false_request)
+                                          data=false_request)
 
-        # Check our user is logged in
-        self.assertEqual(true_response.context['user'].username, 'testuser1')
-
-        self.assertRedirects(false_response, 'favorites:fail')
+        self.assertRedirects(false_response, reverse('favorites:fail'))
 
 
 class WellDoneViewTest(TestCase):
@@ -235,8 +222,6 @@ class WellDoneViewTest(TestCase):
 
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 302)
-        # Check our user is logged in
-        self.assertEqual(response.context['user'].username, 'testuser1')
 
 
 class FailViewTest(TestCase):

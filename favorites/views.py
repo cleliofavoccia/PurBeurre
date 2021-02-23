@@ -28,7 +28,7 @@ class FavoriteCreateView(LoginRequiredMixin, generic.View):
     def post(self, request):
         form = FavoriteForm(request.POST)
         if form.is_valid():
-            form.save(request)
+            form.save(request.user)
             return redirect('favorites:well_done')
         return redirect('favorites:fail')
 

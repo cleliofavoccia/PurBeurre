@@ -19,7 +19,6 @@ class ResultsListViewTest(TestCase):
             description='pate a tartiner au chocolat'
                         'et a la noisette',
             nutriscore='d',
-            categories='pate a tartiner, chocolat, noisette',
             url='https://fr.openfoodfacts.org/produit/8000500217078/'
                 'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
             image_url='https://static.openfoodfacts.org/images/products/'
@@ -32,7 +31,6 @@ class ResultsListViewTest(TestCase):
             description='pate a tartiner au chocolat'
                         'et a la noisette',
             nutriscore='a',
-            categories='pate a tartiner, chocolat, noisette',
             url='https://fr.openfoodfacts.org/produit/8000500217078/'
                 'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
             image_url='https://static.openfoodfacts.org/images/products/'
@@ -45,7 +43,6 @@ class ResultsListViewTest(TestCase):
             description='pate a tartiner au chocolat'
                         'et a la noisette',
             nutriscore='e',
-            categories='pate a tartiner, chocolat, noisette',
             url='https://fr.openfoodfacts.org/produit/8000500217078/'
                 'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
             image_url='https://static.openfoodfacts.org/images/products/'
@@ -57,7 +54,6 @@ class ResultsListViewTest(TestCase):
             name='nutella bio equitable',
             description='pate a tartiner a la noisette',
             nutriscore='a',
-            categories='pate a tartiner, noisette',
             url='https://fr.openfoodfacts.org/produit/8000500217078/'
                 'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
             image_url='https://static.openfoodfacts.org/images/products/'
@@ -72,25 +68,15 @@ class ResultsListViewTest(TestCase):
         nutella_bio.categories.add(pate_a_tartiner, noisette)
 
     def test_view_uses_correct_template(self):
-        response = self.client.get(reverse('products:results'))
+        request = {'research': ['nutella']}
+        response = self.client.get(reverse('products:results'), data=request)
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'products/results.html')
 
-    def test_view_research_with_datas(self):
-        request = {'research': ['nutella']}
-        response = self.client.get(reverse('products:results'), kwargs=request)
-
-        self.assertEqual(response, f'{reverse("products:results")}?research=nutella')
-
-        request = {'research': ['']}
-        response = self.client.get(reverse('products:results'), kwargs=request)
-
-        self.assertEqual(response, f'{reverse("products:results")}?research=')
-
     def test_view_return_datas(self):
-        request = {'research': ['nutella']}
-        response = self.client.post(reverse('products:results'), kwargs=request)
+        request = {'research': 'nutella'}
+        response = self.client.get(reverse('products:results'), data=request)
         products_list = response.context['results']
 
         # Return all the objects of the categories of the researched product order by nutriscore
@@ -102,12 +88,17 @@ class ResultsListViewTest(TestCase):
             num_categories_share_with_product=Count('categories')
         ).order_by('num_categories_share_with_product').order_by('nutriscore')
 
-        self.assertEqual(products_list, products_list_test)
+        for products in zip(products_list, products_list_test):
+            self.assertEqual(products[0], products[1])
 
-        request = {'research': ['']}
-        response = self.client.post(reverse('products:results'), kwargs=request)
-        error_response = response.context['base_product']
+        request2 = {'research': 'qsd'}
+        response2 = self.client.get(reverse('products:results'), data=request2)
+        error_response = response2.context['base_product']
 
         self.assertEqual(error_response, 'Oups ! Pas de meilleur produit que celui-ci.')
 
+        # que faire pour champs vide ?
 
+
+class ProductDetailView(TestCase):
+    pass

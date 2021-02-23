@@ -28,11 +28,11 @@ class FavoriteForm(forms.Form):
 
         return substitute
 
-    def save(self, request, commit=True):
+    def save(self, user, commit=True):
         product = self.cleaned_data['product']
         substitute = self.cleaned_data['substitute']
         favorite = Favorite(
-            user=request.user, product=product, substitute=substitute
+            user=user, product=product, substitute=substitute
         )
         if commit:
             favorite.save()

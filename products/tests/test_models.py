@@ -71,11 +71,6 @@ class ProductModelTest(TestCase):
         max_length = product._meta.get_field('nutriscore').max_length
         self.assertEqual(max_length, 1)
 
-    def test_categories_related_name(self):
-        product = Product.objects.get(name='nutella')
-        related_name = product._meta.get_field('categories').related_name
-        self.assertEqual(related_name, 'products')
-
     def test_object_name_is_name(self):
         product = Product.objects.get(name='nutella')
         expected_object_name = product.name
@@ -98,11 +93,16 @@ class CategoryModelTest(TestCase):
         self.assertEqual(expected_objet_name, str(category))
 
     def test_name_max_length(self):
-        product = Product.objects.get(name='nutella')
-        max_length = product._meta.get_field('name').max_length
+        category = Category.objects.get(name='pate a tartiner')
+        max_length = category._meta.get_field('name').max_length
         self.assertEqual(max_length, 100)
 
     def test_name_is_unique(self):
-        product = Product.objects.get(name='nutella')
-        unique = product._meta.get_field('name').unique
+        category = Category.objects.get(name='pate a tartiner')
+        unique = category._meta.get_field('name').unique
         self.assertTrue(unique)
+
+    def test_categories_related_name(self):
+        category = Category.objects.get(name='pate a tartiner')
+        related_name = category._meta.get_field('products').related_name
+        self.assertEqual(related_name, 'products')
