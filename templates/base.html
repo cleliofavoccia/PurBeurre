@@ -39,7 +39,7 @@
                         </a>
                         </li>
                         {% if user.is_authenticated %}
-                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">
+                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'users:user_account' %}">
                                 <i class="fas fa-users"></i>
                             </a>
                             </li>

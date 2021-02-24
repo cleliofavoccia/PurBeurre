@@ -1,8 +1,9 @@
+"""Views of products app, all views that concern products"""
+
 from django.views import generic
 from django.db.models import Count
-from django.shortcuts import render
 
-from .models import Category, Product
+from .models import Product
 
 
 class ResultsListView(generic.ListView):
@@ -11,6 +12,7 @@ class ResultsListView(generic.ListView):
     template_name = 'products/results.html'
 
     def get_context_data(self, **kwargs):
+        """Methods that return an enriched context to use for the view"""
         search_product = self.request.GET.get('research')
         context = super().get_context_data(**kwargs)
 
@@ -38,16 +40,6 @@ class ResultsListView(generic.ListView):
             return context
 
         return context
-
-
-class ProductListView(generic.ListView):
-    """Generic class-based view listing all products"""
-    model = Product
-
-
-class ProductsByCategoryListView(generic.ListView):
-    """Generic class-based view listing all products by Category"""
-    model = Product
 
 
 class ProductDetailView(generic.DetailView):

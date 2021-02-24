@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }}</title>
+</head>
+<body>
+
+{% block content %}
+<header class="product_image" style="background-image: url({{ product.image_url }});
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;" >
+    <h1 class="product_name">{{ product.name }}</h1>
+</header>
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Nutriscore</h1>
+            {% if product.nutriscore == 'a' %}
+            <h2>A</h2>
+            {% else %}
+            <h4>A</h4>
+            {% endif %}
+            {% if product.nutriscore == 'b' %}
+            <h2>B</h2>
+            {% else %}
+            <h4>B</h4>
+            {% endif %}
+            {% if product.nutriscore == 'c' %}
+            <h2>C</h2>
+            {% else %}
+            <h4>C</h4>
+            {% endif %}
+            {% if product.nutriscore == 'd' %}
+            <h2>D</h2>
+            {% else %}
+            <h4>D</h4>
+            {% endif %}
+            {% if product.nutriscore == 'e' %}
+            <h2>E</h2>
+            {% else %}
+            <h4>E</h4>
+            {% endif %}
+            </div>
+        <div class="col">
+            <h1>Repère nutritionnels pour 100g</h1>
+            <img src="{{ product.nutrition_image_url }}" />
+        </div>
+        </div>
+    <div class="off">
+        <button class="btn btn-default btn-lg">
+            <a href="{{ product.url }}"></a>
+            <h1>Voir la fiche d'Open Food Facts</h1>
+        </button>
+    </div>
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

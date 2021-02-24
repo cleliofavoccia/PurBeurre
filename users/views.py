@@ -1,17 +1,22 @@
+"""Views of users app, all that concern users (authentification and other things)"""
+
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import CreateUserForm
+from .models import User
 
-@login_required
-def user_account(request):
-    """Print user_account.html in website"""
-    return render(request, 'user_account.html')
+
+class UserDetailView(LoginRequiredMixin, View):
+    """View detailed user profile"""
+
+    def get(self, request):
+        return render(request, 'users/user_account.html')
 
 
 class SignIn(View):
-    """Generic class-based view detailed CreateUserForm"""
+    """View to sign in an user with CreateUserForm"""
     form = CreateUserForm()
 
     def get(self, request):

@@ -1,3 +1,4 @@
+"""Tests all the views of products app views that are implemented"""
 
 from django.shortcuts import reverse
 from django.test import TestCase
@@ -101,4 +102,30 @@ class ResultsListViewTest(TestCase):
 
 
 class ProductDetailView(TestCase):
-    pass
+    @classmethod
+    def setUpTestData(cls):
+        pate_a_tartiner = Category.objects.create(name='pate a tartiner')
+        chocolat = Category.objects.create(name='chocolat')
+        noisette = Category.objects.create(name='noisette')
+
+        # Set up non-modified objects used by all test methods
+        nutella = Product.objects.create(
+            name='nutella',
+            description='pate a tartiner au chocolat'
+                        'et a la noisette',
+            nutriscore='d',
+            url='https://fr.openfoodfacts.org/produit/8000500217078/'
+                'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
+            image_url='https://static.openfoodfacts.org/images/products/'
+                      '800/050/021/7078/front_fr.63.400.jpg',
+            nutrition_image_url='https://static.openfoodfacts.org/images/products'
+                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+        )
+        nutella.categories.add(pate_a_tartiner, chocolat, noisette)
+
+    def test_view_uses_correct_template(self):
+        product = Product.objects.get(name='nutella')
+        response = self.client.get(reverse('products', args=product.pk))
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/product_detail.html')
