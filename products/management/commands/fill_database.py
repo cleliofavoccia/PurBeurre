@@ -19,7 +19,7 @@ class Command(BaseCommand):
                          .get_products_by_popularity(page_size=1000,
                                                      number_of_pages=1))
 
-        products_list = cleaner_request.clean1(products_list)
+        products_list = cleaner_request.clean(products_list)
 
         for product in products_list:
             record_product = Product(name=product['name'],

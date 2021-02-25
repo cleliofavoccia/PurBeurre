@@ -21,9 +21,9 @@ def validate_fields_are_not_empty_in_product(product):
 
 
 class ProductValidator:
-    """Objet responsable de valider les produits par rapport aux règles
-    dans validators et de ne conserver que ceux qui sont valides.
-    """
+    """Class that validates products with certain parameters and
+    remove from recovered datas from Open Food Facts those aren't
+    validates"""
 
     validators = [
         validate_fields_are_present_in_product,
@@ -31,11 +31,11 @@ class ProductValidator:
     ]
 
     def is_valid(self, product):
-        """Retourne True si le product passé en argument est valide.
+        """
         Args:
-            product (dict): dictionnaire contenant les données d'un produit
+            product (dict)
         Return:
-            True si le produit est valide.
+            True if the product is valid.
         """
         for validator in self.validators:
             if not validator(product):
@@ -43,12 +43,11 @@ class ProductValidator:
         return True
 
     def filter(self, products):
-        """Elimine les produits invalides depuis la listes de produits passée
-        en argument.
+        """Remove non validates products from list of products
         Args:
-            products (list): liste de produits à filtrer.
+            products (list): list of products to filtrate.
         Return:
-            Liste de produits considérés comme valides.
+            All products from the list that valid.
         """
         filtered_products = []
         for product in products:

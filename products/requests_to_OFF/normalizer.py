@@ -35,7 +35,7 @@ def transform_field_names(product):
 
 
 class ProductNormalizer:
-    """Objet permettant de normaliser les dictionnaires de produits."""
+    """Class to normalize product dictionnaries"""
 
     normalizers = [
         remove_unuseful_fields,
@@ -45,15 +45,23 @@ class ProductNormalizer:
     ]
 
     def normalize(self, product):
-        """Normalise un produit individuel en utilisant les
-        normaliseurs fournis.
-        """
+        """Normalize an individual product with normalizers
+        provided.
+        Args:
+            A product
+        Return:
+            A product normalized"""
         for normalizer in self.normalizers:
             normalizer(product)
 
+        return product
+
     def normalize_all(self, products):
-        """Normalise chaque produit présent dans la liste de produits
-        fournie.
-        """
+        """Normalize each product with normalize
+        method provided.
+        Args:
+            A product list
+        Return:
+            A product list normalized"""
         for product in products:
             self.normalize(product)

@@ -1,45 +1,43 @@
+"""File with class OpenfoodfactsClient to communicate with Open Food Facts API"""
 import json
 import requests
 
 
-class APIError(Exception):
-    pass
-
-
+# class APIError(Exception):
+#     pass
 class OpenfoodfactsClient:
-    """Docstring qui explique le rôle joué par la classe."""
+    """Attributes and methods to do things with Open Food Facts API"""
 
     def __init__(self, country="fr"):
+        """Attribute of OpenFoodFactsClient, here the URL to call the API"""
         if country not in ("fr", "en", "world"):
             raise ValueError("Country must be fr, en or world")
         self.url = f"https://{country}.openfoodfacts.org/cgi/search.pl"
 
     def get_products_by_popularity(self, page_size, number_of_pages):
-        """Download des produits depuis openfoodfacts par ordre de popularité.
+        """Download products from Open Food Facts database order by popularity
 
         Args:
-            number_of_pages: nombre de pages de produits à télécharger
-            page_size: nombre de produit à télécharger par page (optionnel,
-                la valeur par défaut est 100)
+            number_of_pages: number of pages to download
+            page_size: number of products per pages to download
 
         Return:
-            Liste de dictionnaires contenant les informations des produits.
+            Dictionnary with product informations
 
         Exceptions:
-            APIError: Une APIError est levée si l'API de Openfoodfacts n'est pas
-                joignable ou que l'utilisateur n'est pas connecté au réseau.
+            Return messages if Openfoodfacts API is down or the user is not connected.
 
         """
         products = []
         for page in range(1, number_of_pages + 1):
             params = {
                 "action": "process",
-                "sort_by": "unique_scans_n",  # popularité
+                "sort_by": "unique_scans_n", # popularity
                 "page_size": page_size,
                 "page": page,
                 "json": True,
             }
-            # Toujours supposer qu'une requête à une API peut échouer
+
             try:
                 response = requests.get(self.url, params=params)
                 response.raise_for_status()
@@ -49,7 +47,7 @@ class OpenfoodfactsClient:
             except requests.exceptions.RequestException:
                 print("Une erreur de connection réseau a eu lieu")
                 continue
-            # On est certain qu'il n'y a pas eu d'erreur réseau
+
             try:
                 data = response.json()
             except json.JSONDecodeError:
