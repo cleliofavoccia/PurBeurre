@@ -25,11 +25,11 @@
         <div class="col product_list">
             <figure>
                 <h3 class="nutriscore">{{ product.nutriscore }}</h3>
-                <a href="{% url 'products:product' product.pk %}"><img class="results" src="{{ product.image_url }}" /></a>
+                <a id="results" href="{% url 'products:product' product.pk %}"><img src="{{ product.image_url }}" /></a>
 
                 <form method="POST" action="{% url 'favorites:add_favorites' %}">
                     {% csrf_token %}
-                    <button id="button-save" value="submit" class="btn btn-default btn-lg"><i class="far fa-save"></i>Sauvegarder</button>
+                    <button id="button-add-favorites" value="submit" class="btn btn-default btn-lg"><i class="far fa-save"></i>Sauvegarder</button>
                     <input type="hidden" name="product" value="{{ base_product.id }}"/>
                     <input type="hidden" name="substitute" value="{{ product.id }}"/>
                 </form>

@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.shortcuts import reverse
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 chrome_options = webdriver.ChromeOptions()  # Call chrome options class
 chrome_options.add_argument('--headless')  # Headless mode ?
@@ -55,13 +56,13 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
         )
         self.driver.find_element_by_css_selector('#button-submit').click()
         # Disconnect
-        self.driver.find_element_by_css_selector('#button-logout')
-        # # Test disconnection
-        # response = self.driver.find_element_by_css_selector('#button-account')
-        # self.assertEqual(response.status_code, 302)
+        self.driver.find_element_by_css_selector('#button-logout').click()
+        # Test disconnection
+        self.driver.find_element_by_css_selector('#button-login').click()
 
-    def test_user_can_sign_in_and_connect(self):
+    def test_user_can_sign_in(self):
         self.driver.get(self.live_server_url)
+        # Sign in
         self.driver.find_element_by_css_selector('#button-login').click()
         self.driver.find_element_by_css_selector('#button-sign_in').click()
         self.driver.find_element_by_css_selector('#id_username').send_keys(
@@ -71,10 +72,10 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             "testuser2@test.com"
         )
         self.driver.find_element_by_css_selector('#id_password1').send_keys(
-            "eofh5jf"
+            "eofh5jf8"
         )
         self.driver.find_element_by_css_selector('#id_password2').send_keys(
-            "eofh5jf"
+            "eofh5jf8"
         )
         self.driver.find_element_by_css_selector('#button-submit').click()
         # Connect
@@ -83,9 +84,11 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             "testuser2"
         )
         self.driver.find_element_by_css_selector('#id_password').send_keys(
-            "eofh5jf"
+            "eofh5jf8"
         )
         self.driver.find_element_by_css_selector('#button-submit').click()
+        # Test connection
+        self.driver.find_element_by_css_selector('#button-account').click()
 
     def test_user_can_access_to_his_page_account(self):
         self.driver.get(self.live_server_url)
@@ -98,6 +101,11 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             "PdfjqX458s"
         )
         self.driver.find_element_by_css_selector('#button-submit').click()
+        self.driver.find_element_by_css_selector('#button-account').click()
+        # Proof is in account
+        self.driver.find_element_by_css_selector('#modify-email').send_keys(
+            "testuser@live.fr"
+        )
 
     def test_user_can_type_a_request_in_substitute_forms(self):
         self.driver.get(self.live_server_url)
@@ -105,20 +113,40 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             "nutella"
         )
 
-    def test_user_can_add_to_favorite_a_substitute(self):
+    def test_user_can_add_to_favorite_a_substitute_if_is_connected(self):
         self.driver.get(self.live_server_url)
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_css_selector('#id_username').send_keys(
+            "testuser"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "PdfjqX458s"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
         self.driver.find_element_by_css_selector('#id_research').send_keys(
             "nutella"
         )
-        self.driver.find_element_by_css_selector('#button-save').click()
+        self.driver.find_element_by_css_selector('#id_research').send_keys(Keys.ENTER)
+        self.driver.find_element_by_css_selector('#button-add-favorites').click()  # Error
 
     def test_user_can_consult_product_detail(self):
         self.driver.get(self.live_server_url)
         self.driver.find_element_by_css_selector('#id_research').send_keys(
             "nutella"
         )
-        self.driver.find_element_by_css_selector('.results').click()
+        self.driver.find_element_by_css_selector('#id_research').send_keys(Keys.ENTER)
+        self.driver.find_element_by_css_selector('#results').click()  # Error
 
     def test_user_can_access_to_his_favorites_page(self):
         self.driver.get(self.live_server_url)
+        # Connect
+        self.driver.find_element_by_css_selector('#button-login').click()
+        self.driver.find_element_by_css_selector('#id_username').send_keys(
+            "testuser"
+        )
+        self.driver.find_element_by_css_selector('#id_password').send_keys(
+            "PdfjqX458s"
+        )
+        self.driver.find_element_by_css_selector('#button-submit').click()
         self.driver.find_element_by_css_selector('#button-favorites')
