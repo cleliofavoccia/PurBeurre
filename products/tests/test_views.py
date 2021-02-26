@@ -125,7 +125,7 @@ class ProductDetailView(TestCase):
 
     def test_view_uses_correct_template(self):
         product = Product.objects.get(name='nutella')
-        response = self.client.get(reverse('products', args=product.pk))
+        response = self.client.get(reverse('products:product', args=[product.pk]))
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'products/product_detail.html')

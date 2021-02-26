@@ -29,7 +29,7 @@
 
                 <form method="POST" action="{% url 'favorites:add_favorites' %}">
                     {% csrf_token %}
-                    <button value="submit" class="btn btn-default btn-lg"><i class="far fa-save"></i>Sauvegarder</button>
+                    <button id="button-save" value="submit" class="btn btn-default btn-lg"><i class="far fa-save"></i>Sauvegarder</button>
                     <input type="hidden" name="product" value="{{ base_product.id }}"/>
                     <input type="hidden" name="substitute" value="{{ product.id }}"/>
                 </form>

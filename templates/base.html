@@ -34,12 +34,12 @@
                             {{ substitute_form }}
                             </form>
                         </li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'favorites:my_favorites' %}">
+                        <li class="nav-item"><a id="button-favorites" class="nav-link js-scroll-trigger" href="{% url 'favorites:my_favorites' %}">
                             <i class="fas fa-carrot"></i>
                         </a>
                         </li>
                         {% if user.is_authenticated %}
-                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'users:user_account' %}">
+                            <li class="nav-item"><a id="button-account" class="nav-link js-scroll-trigger" href="{% url 'users:user_account' %}">
                                 <i class="fas fa-users"></i>
                             </a>
                             </li>
