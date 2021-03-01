@@ -32,7 +32,7 @@ class OpenfoodfactsClient:
         for page in range(1, number_of_pages + 1):
             params = {
                 "action": "process",
-                "sort_by": "unique_scans_n", # popularity
+                "sort_by": "unique_scans_n",  # popularity
                 "page_size": page_size,
                 "page": page,
                 "json": True,
