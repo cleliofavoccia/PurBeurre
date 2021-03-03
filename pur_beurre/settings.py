@@ -15,7 +15,6 @@ import os
 
 from dotenv import load_dotenv, find_dotenv
 
-
 load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -148,4 +147,3 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Personnalised User
 AUTH_USER_MODEL = 'users.User'
-

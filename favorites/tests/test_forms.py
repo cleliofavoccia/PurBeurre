@@ -97,3 +97,23 @@ class FavoriteFormTest(TestCase):
         form.is_valid()
         favorite = form.save(self.test_user1)
         self.assertEqual(favorite, Favorite.objects.get(id=favorite.id))
+
+    def test_clean_product(self):
+        cleaned_data = {'product': 'nutella'}
+
+        product_name = cleaned_data['product']
+        product = Product.objects.get(name=product_name)
+        self.assertTrue(product)
+
+    def test_clean_substitute(self):
+        cleaned_data = {
+            'substitute':
+                'muesli sans sucre ajouté* bio'
+        }
+
+        substitute_name = cleaned_data['substitute']
+        substitute = Product.objects.get(name=substitute_name)
+        self.assertTrue(substitute)
+
+
+

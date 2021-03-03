@@ -1,9 +1,7 @@
-import sys
-
+"""Functionnal test on Chrome session"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.shortcuts import reverse
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -128,7 +126,7 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             "nutella"
         )
         self.driver.find_element_by_css_selector('#id_research').send_keys(Keys.ENTER)
-        self.driver.find_element_by_css_selector('#button-add-favorites').click()  # Error
+        self.driver.find_element_by_tag_name('input').click()  # Error
 
     def test_user_can_consult_product_detail(self):
         self.driver.get(self.live_server_url)
@@ -136,7 +134,7 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
             "nutella"
         )
         self.driver.find_element_by_css_selector('#id_research').send_keys(Keys.ENTER)
-        self.driver.find_element_by_css_selector('#results').click()  # Error
+        self.driver.find_element_by_tag_name('a').click()  # Error
 
     def test_user_can_access_to_his_favorites_page(self):
         self.driver.get(self.live_server_url)

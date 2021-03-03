@@ -12,7 +12,7 @@ class FavoriteModelTest(TestCase):
         chocolat = Category.objects.create(name='chocolat')
         noisette = Category.objects.create(name='noisette')
 
-        nutella = Product.objects.create(
+        cls.nutella = Product.objects.create(
             name='nutella',
             description='pate a tartiner au chocolat'
                         'et a la noisette',
@@ -25,7 +25,7 @@ class FavoriteModelTest(TestCase):
                                 '/800/050/021/7078/nutrition_fr.64.400.jpg'
         )
 
-        muesli = Product.objects.create(
+        cls.muesli = Product.objects.create(
             name='muesli sans sucre ajouté* bio',
             description='pate a tartiner au chocolat'
                         'et a la noisette',
@@ -38,47 +38,41 @@ class FavoriteModelTest(TestCase):
                                 '/800/050/021/7078/nutrition_fr.64.400.jpg'
         )
 
-        nutella.categories.add(pate_a_tartiner, chocolat, noisette)
-        muesli.categories.add(chocolat, noisette)
+        cls.nutella.categories.add(pate_a_tartiner, chocolat, noisette)
+        cls.muesli.categories.add(chocolat, noisette)
 
         # Create one user
-        test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
-        test_user1.save()
+        cls.test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
+        cls.test_user1.save()
 
-        favorite = Favorite.objects.create(user=test_user1, product=nutella, substitute=muesli)
+        cls.favorite = Favorite.objects.create(user=cls.test_user1, product=cls.nutella, substitute=cls.muesli)
 
     def test_favorite_has_product(self):
-        favorite = Favorite.objects.get(id=1)
-        product = Product.objects.get(id=1)
-        favorite_product = Favorite.objects.get(product=product)
-        self.assertEqual(favorite, favorite_product)
+        favorite_product = Favorite.objects.get(product=Product.objects.get(name='nutella'))
+        self.assertEqual(self.favorite, favorite_product)
 
     def test_favorite_has_substitute(self):
-        favorite = Favorite.objects.get(id=1)
-        substitute = Product.objects.get(id=2)
-        favorite_substitute = Favorite.objects.get(substitute=substitute)
-        self.assertEqual(favorite, favorite_substitute)
+        favorite_substitute = Favorite.objects.get(substitute=self.muesli)
+        self.assertEqual(self.favorite, favorite_substitute)
 
     def test_favorite_has_user(self):
-        favorite = Favorite.objects.get(id=1)
-        user = User.objects.get(id=1)
-        favorite_user = Favorite.objects.get(user=user)
-        self.assertEqual(favorite, favorite_user)
+        favorite_user = Favorite.objects.get(user=self.test_user1)
+        self.assertEqual(self.favorite, favorite_user)
 
     def test_delete_favorite_not_delete_user_and_products(self):
-        favorite = Favorite.objects.get(id=1)
+        favorite = self.favorite
         favorite.delete()
-        user = User.objects.get(id=1)
-        product = Product.objects.get(id=1)
-        substitute = Product.objects.get(id=2)
+        user = self.test_user1
+        product = self.nutella
+        substitute = self.muesli
 
         self.assertTrue(user)
         self.assertTrue(product)
         self.assertTrue(substitute)
 
     def test_object_name_is_user_plus_substitute(self):
-        favorite = Favorite.objects.get(id=1)
-        user = User.objects.get(id=1)
-        substitute = Product.objects.get(id=2)
+        favorite = self.favorite
+        user = self.test_user1
+        substitute = self.muesli
         expected_objet_name = '%s, %s' % (user.username, substitute.name)
         self.assertEqual(expected_objet_name, str(favorite))
