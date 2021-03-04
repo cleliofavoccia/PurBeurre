@@ -7,7 +7,7 @@ from users.models import User
 
 class FavoriteModelTest(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUp(cls):
         pate_a_tartiner = Category.objects.create(name='pate a tartiner')
         chocolat = Category.objects.create(name='chocolat')
         noisette = Category.objects.create(name='noisette')
@@ -21,8 +21,10 @@ class FavoriteModelTest(TestCase):
                 'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
             image_url='https://static.openfoodfacts.org/images/products/'
                       '800/050/021/7078/front_fr.63.400.jpg',
-            nutrition_image_url='https://static.openfoodfacts.org/images/products'
-                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+            nutrition_image_url=(
+                'https://static.openfoodfacts.org/images/products'
+                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+            )
         )
 
         cls.muesli = Product.objects.create(
@@ -34,21 +36,34 @@ class FavoriteModelTest(TestCase):
                 'nutella-b-ready-biscuits-220g-paquet-de-10-pieces-ferrero',
             image_url='https://static.openfoodfacts.org/images/products/'
                       '800/050/021/7078/front_fr.63.400.jpg',
-            nutrition_image_url='https://static.openfoodfacts.org/images/products'
-                                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+            nutrition_image_url=(
+                'https://static.openfoodfacts.org/images/products'
+                '/800/050/021/7078/nutrition_fr.64.400.jpg'
+            )
         )
 
         cls.nutella.categories.add(pate_a_tartiner, chocolat, noisette)
         cls.muesli.categories.add(chocolat, noisette)
 
         # Create one user
-        cls.test_user1 = User.objects.create(username='testuser1', password='1X<ISRUkw+tuK')
+        cls.test_user1 = User.objects.create(
+            username='testuser1',
+            password='1X<ISRUkw+tuK'
+        )
         cls.test_user1.save()
 
-        cls.favorite = Favorite.objects.create(user=cls.test_user1, product=cls.nutella, substitute=cls.muesli)
+        cls.favorite = Favorite.objects.create(
+            user=cls.test_user1,
+            product=cls.nutella,
+            substitute=cls.muesli
+        )
 
     def test_favorite_has_product(self):
-        favorite_product = Favorite.objects.get(product=Product.objects.get(name='nutella'))
+        favorite_product = Favorite.objects.get(
+            product=Product.objects.get(
+                name='nutella'
+            )
+        )
         self.assertEqual(self.favorite, favorite_product)
 
     def test_favorite_has_substitute(self):

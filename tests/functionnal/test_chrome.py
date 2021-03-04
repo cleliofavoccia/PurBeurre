@@ -5,9 +5,12 @@ from django.conf import settings
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-chrome_options = webdriver.ChromeOptions()  # Call chrome options class
-chrome_options.add_argument('--headless')  # Headless mode ?
-chrome_options.add_argument('window-size=1920x1080')  # Navigate in a certain window
+# Call chrome options class
+chrome_options = webdriver.ChromeOptions()
+# Headless mode
+chrome_options.add_argument('--headless')
+# Navigate in a certain window
+chrome_options.add_argument('window-size=1920x1080')
 
 
 class ChromeFunctionalTestCases(StaticLiveServerTestCase):
@@ -19,13 +22,18 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
         and define his behavior"""
         super().setUpClass()
         cls.driver = webdriver.Chrome(
-            executable_path=str(settings.BASE_DIR / 'webdrivers' / 'chromedriver'),
+            executable_path=str(
+                settings.BASE_DIR / 'webdrivers' / 'chromedriver'
+            ),
             options=chrome_options,
         )
-        cls.driver.implicitly_wait(30)  # Wait wait for a certain amount of time
+        # Wait wait for a certain amount of time
         # before it throws a "No Such Element Exception"
-        cls.driver.maximize_window()  # Reduces the chances of Selenium scripts
-        # missing out on web elements they must interact with during automated tests
+        cls.driver.implicitly_wait(30)
+        # Reduces the chances of Selenium scripts
+        # missing out on web elements they must interact
+        # with during automated tests
+        cls.driver.maximize_window()
 
     @classmethod
     def tearDownClass(cls):
@@ -59,6 +67,8 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
         self.driver.find_element_by_css_selector('#button-login').click()
 
     def test_user_can_sign_in(self):
+        """Test if user with a Chrome session can sign in
+         to the website"""
         self.driver.get(self.live_server_url)
         # Sign in
         self.driver.find_element_by_css_selector('#button-login').click()
@@ -89,6 +99,8 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
         self.driver.find_element_by_css_selector('#button-account').click()
 
     def test_user_can_access_to_his_page_account(self):
+        """Test if user with a Chrome session can access
+        to his page account"""
         self.driver.get(self.live_server_url)
         # Connect
         self.driver.find_element_by_css_selector('#button-login').click()
@@ -106,12 +118,16 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
         )
 
     def test_user_can_type_a_request_in_substitute_forms(self):
+        """Test if user with a Chrome session can make a request
+        in differents substitute forms on the website"""
         self.driver.get(self.live_server_url)
         self.driver.find_element_by_css_selector('#id_research').send_keys(
             "nutella"
         )
 
     def test_user_can_add_to_favorite_a_substitute_if_is_connected(self):
+        """Test if user with a Chrome session can add a substitute
+        in his favorites list if he is connected"""
         self.driver.get(self.live_server_url)
         # Connect
         self.driver.find_element_by_css_selector('#button-login').click()
@@ -125,18 +141,25 @@ class ChromeFunctionalTestCases(StaticLiveServerTestCase):
         self.driver.find_element_by_css_selector('#id_research').send_keys(
             "nutella"
         )
-        self.driver.find_element_by_css_selector('#id_research').send_keys(Keys.ENTER)
+        (self.driver.find_element_by_css_selector('#id_research')
+         .send_keys(Keys.ENTER))
         self.driver.find_element_by_tag_name('input').click()  # Error
 
     def test_user_can_consult_product_detail(self):
+        """Test if user with a Chrome session can consult
+        a product page with clicking on it"""
         self.driver.get(self.live_server_url)
         self.driver.find_element_by_css_selector('#id_research').send_keys(
             "nutella"
         )
-        self.driver.find_element_by_css_selector('#id_research').send_keys(Keys.ENTER)
+        (self.driver.find_element_by_css_selector('#id_research')
+         .send_keys(Keys.ENTER))
         self.driver.find_element_by_tag_name('a').click()  # Error
 
     def test_user_can_access_to_his_favorites_page(self):
+        """Test if user with a Chrome session can access
+        to his favorites pages (list of substitutes add
+        to favorites)"""
         self.driver.get(self.live_server_url)
         # Connect
         self.driver.find_element_by_css_selector('#button-login').click()

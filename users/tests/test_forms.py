@@ -1,4 +1,4 @@
-"""Test forms from users app"""
+"""Test forms of users app"""
 
 from django.test import TestCase
 
@@ -6,10 +6,12 @@ from users.forms import CreateUserForm
 
 
 class CreateUserFormTest(TestCase):
-    """Test CreateUserForm (sign in forms to permit the users to register him)"""
+    """Test CreateUserForm
+    (sign in forms to permit the users to register him)"""
 
     def test_substitute_form_validity_with_different_datas(self):
-        """Test form.is_valid() for different configurations of receive datas"""
+        """Test form.is_valid() for different configurations
+        of receive datas"""
         request = {'username': 'testuser1', 'email': 'testuser1@test.fr',
                    'password1': 'sdfuhosd', 'password2': 'sdfuhosd'}
 
@@ -33,4 +35,3 @@ class CreateUserFormTest(TestCase):
                                     'password1': 'sdfuhosd',
                                     'password2': 'sdfuhosd'})
         self.assertFalse(form.is_valid())
-

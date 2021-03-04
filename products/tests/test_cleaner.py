@@ -44,7 +44,9 @@ class CleanerTest(TestCase):
               'nutriscore_grade': 'e',
               'url': 'https://fr.openfoodfacts.org/produit',
               'image_url': 'https://fr.openfoodfacts.org/produit.jpg',
-              'image_nutrition_url': 'https://fr.openfoodfacts.org/produit/nut.jpg',
+              'image_nutrition_url': (
+                  'https://fr.openfoodfacts.org/produit/nut.jpg'
+              ),
               'categories': 'pate a tartiner, chocolat, noisette',
               'popularity': 'Very Good'
     }

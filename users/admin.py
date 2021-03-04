@@ -1,3 +1,4 @@
+"""Manage Users objects in Django admin"""
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 

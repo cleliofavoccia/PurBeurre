@@ -1,4 +1,5 @@
-"""File with class OpenfoodfactsClient to communicate with Open Food Facts API"""
+"""File with class OpenfoodfactsClient
+to communicate with Open Food Facts API"""
 import json
 import requests
 
@@ -25,7 +26,8 @@ class OpenfoodfactsClient:
             Dictionnary with product informations
 
         Exceptions:
-            Return messages if Openfoodfacts API is down or the user is not connected.
+            Return messages if Openfoodfacts API is down
+            or the user is not connected.
 
         """
         products = []

@@ -1,9 +1,9 @@
-
-from django.shortcuts import redirect, render, get_object_or_404, reverse
+"""Context usable in all templates of the project"""
 from .forms import SubstituteForm
-from .models import Product
 
 
 def get_substitute_form(request):
+    """Print a form to post data on SubstituteForm
+    of products app"""
     form = SubstituteForm(request.POST or None)
     return {'substitute_form': form}

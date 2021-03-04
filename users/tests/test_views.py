@@ -10,14 +10,17 @@ class UserDetailViewTest(TestCase):
     """Test UserDetailView (view detailed user profile)"""
 
     def setUp(self):
+        """Create User for test database to
+        test all test methods"""
         self.test_user1 = User.objects.create_user(
             username="testuser", password="PdfjqX458s"
         )
         self.test_user1.save()
 
     def test_view_uses_correct_template_if_user_connected(self):
-        """Test UserDetailView use users/user_account.html template"""
-        login = self.client.force_login(self.test_user1)
+        """Test UserDetailView use users/user_account.html template
+        if user is connected"""
+        self.client.force_login(self.test_user1)
         response = self.client.get(reverse('users:user_account'))
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
@@ -27,7 +30,8 @@ class UserDetailViewTest(TestCase):
         self.assertTemplateUsed(response, 'users/user_account.html')
 
     def test_view_uses_redirect_if_user_not_connected(self):
-        """Test UserDetailView use users/user_account.html template"""
+        """Test UserDetailView use login.html template
+        if user is not connected"""
         response = self.client.get(reverse('users:user_account'))
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 302)

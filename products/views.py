@@ -19,7 +19,9 @@ class ResultsListView(generic.ListView):
         list_product = Product.objects.filter(name__icontains=search_product)
 
         if not list_product:
-            context['base_product'] = 'Oups ! Pas de meilleur produit que celui-ci.'
+            context['base_product'] = (
+                'Oups ! Pas de meilleur produit que celui-ci.'
+            )
         else:
             product = list_product[0]
             context['base_product'] = product
@@ -27,12 +29,19 @@ class ResultsListView(generic.ListView):
             # Take the categories of the researched product
             product_categories = product.categories.all()
 
-            products = Product.objects.filter(nutriscore__lt=product.nutriscore)
+            products = Product.objects.filter(
+                nutriscore__lt=product.nutriscore
+            )
 
-            # Return all the objects of the categories of the researched product order by nutriscore
+            # Return all the objects of the categories of
+            # the researched product order by nutriscore
             context['results'] = (
-                products.filter(categories__in=product_categories)
-                .annotate(num_categories_share_with_product=Count('categories'))
+                products.filter(
+                    categories__in=product_categories
+                )
+                .annotate(
+                    num_categories_share_with_product=Count('categories')
+                )
                 .order_by('num_categories_share_with_product')
                 .order_by('nutriscore')
                 [:6]

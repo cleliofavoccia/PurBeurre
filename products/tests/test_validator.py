@@ -10,20 +10,28 @@ class ProductValidatorTest(TestCase):
 
     good_product = {
                   'product_name': 'nutella',
-                  'generic_name': 'pate a tartiner au chocolat et a la noisette',
+                  'generic_name': (
+                      'pate a tartiner au chocolat et a la noisette'
+                  ),
                   'nutriscore_grade': 'e',
                   'url': 'https://fr.openfoodfacts.org/produit',
                   'image_url': 'https://fr.openfoodfacts.org/produit.jpg',
-                  'image_nutrition_url': 'https://fr.openfoodfacts.org/produit/nut.jpg',
+                  'image_nutrition_url': (
+                      'https://fr.openfoodfacts.org/produit/nut.jpg'
+                  ),
                   'categories': 'pate a tartiner, chocolat, noisette'
                 }
 
     bad_product = {
                   'product_name': 'nutella',
-                  'generic_name': 'pate a tartiner au chocolat et a la noisette',
+                  'generic_name': (
+                      'pate a tartiner au chocolat et a la noisette'
+                  ),
                   'url': 'https://fr.openfoodfacts.org/produit',
                   'image_url': 'https://fr.openfoodfacts.org/produit.jpg',
-                  'image_nutrition_url': 'https://fr.openfoodfacts.org/produit/nut.jpg',
+                  'image_nutrition_url': (
+                      'https://fr.openfoodfacts.org/produit/nut.jpg'
+                  ),
                   'categories': 'pate a tartiner, chocolat, noisette',
                 }
 

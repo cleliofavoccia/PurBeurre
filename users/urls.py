@@ -1,4 +1,5 @@
-"""Urls of user app, all urls that concern user (authentification and others things)"""
+"""Urls of user app, all urls that concern user
+(authentification and others things)"""
 
 from django.urls import path
 

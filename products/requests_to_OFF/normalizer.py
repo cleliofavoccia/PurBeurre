@@ -1,5 +1,8 @@
+"""Normalizer to normalize data from OpenFoodFacts"""
+
 
 def remove_unuseful_fields(product):
+    """Remove fields don't use in products app"""
     useful_fields = {
         'product_name', 'generic_name', 'nutriscore_grade', 'url',
         'image_url', 'image_nutrition_url', 'categories'
@@ -9,6 +12,7 @@ def remove_unuseful_fields(product):
 
 
 def transform_fields_into_lowercase_letters(product):
+    """Transform fields name in lowercase"""
     fields = {
         'product_name', 'generic_name', 'nutriscore_grade', 'url',
         'image_url', 'image_nutrition_url', 'categories'
@@ -18,12 +22,14 @@ def transform_fields_into_lowercase_letters(product):
 
 
 def transform_categories_into_list(product):
+    """Transforms categories fields in list with each category"""
     product['categories'] = [
         category.strip() for category in product['categories'].split(',')
     ]
 
 
 def transform_field_names(product):
+    """Modify fields names"""
     transformations = {
         "product_name": "name",
         "generic_name": "description",
@@ -35,7 +41,7 @@ def transform_field_names(product):
 
 
 class ProductNormalizer:
-    """Class to normalize product dictionnaries"""
+    """Class to normalize product dictionnary"""
 
     normalizers = [
         remove_unuseful_fields,

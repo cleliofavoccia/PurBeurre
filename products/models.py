@@ -1,19 +1,23 @@
+"""Models of products app"""
 from django.db import models
 
 
 class Category(models.Model):
-    """Categories of products"""
+    """Products Categories"""
 
     # Fields
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        """Print attribute as title's object in admin"""
+        """Print attribute as title's object in Django admin"""
         return self.name
 
 
 class Product(models.Model):
-    """Products of OFF"""
+    """Products with a name, description, nutriscore
+    categories, url on page product of OpenFoodFacts,
+    image url from OpenFoodFacts and nutrition image url
+    from OpenFoodFacts"""
 
     # Fields
     name = models.CharField('product name', max_length=100)
@@ -25,5 +29,5 @@ class Product(models.Model):
     nutrition_image_url = models.URLField('product nutrition image url')
 
     def __str__(self):
-        """Print attribute as title's object in admin"""
+        """Print attribute as title's object in Django admin"""
         return self.name

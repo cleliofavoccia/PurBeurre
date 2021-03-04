@@ -1,5 +1,9 @@
+"""Validator to validate datas from OpenFoodFacts"""
+
 
 def validate_fields_are_present_in_product(product):
+    """Return True if all fields wanted are present in product
+    dictionnary. If not return False"""
     fields = {
         'product_name', 'generic_name', 'nutriscore_grade', 'url',
         'image_url', 'image_nutrition_url', 'categories'
@@ -10,6 +14,8 @@ def validate_fields_are_present_in_product(product):
 
 
 def validate_fields_are_not_empty_in_product(product):
+    """Return True if fields wanted are not empty.
+    If it is return False."""
     fields = {
         'product_name', 'generic_name', 'nutriscore_grade', 'url',
         'image_url', 'image_nutrition_url', 'categories'
