@@ -92,4 +92,6 @@ class OpenFoodFactsClientTest(TestCase):
                   )
 
         self.assertEqual(self.results, client)
-        print(mock_request.assert_called_with(self.url, params=self.params))
+        mock_request.assert_called_with(
+                self.url, params=self.params
+            )
