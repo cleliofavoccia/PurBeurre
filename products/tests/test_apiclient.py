@@ -1,5 +1,7 @@
 """Test requests on API of OpenFoodFacts"""
 
+import requests
+
 from django.test import TestCase
 from unittest.mock import patch
 
@@ -115,7 +117,9 @@ class OpenFoodFactsClientTest(TestCase):
     def test_get_products_by_popularity_return_HTTP_error(self, mock_request):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
-        mock_request.side_effect = mock_request.HTTPError
+        mock_request.return_value.raise_for_status.side_effect = (
+            requests.HTTPError
+        )
 
         client = (
             OpenfoodfactsClient()
@@ -129,7 +133,7 @@ class OpenFoodFactsClientTest(TestCase):
     def test_get_products_by_popularity_return_request_exception(self, mock_request):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
-        mock_request.side_effect = mock_request.exceptions.RequestException
+        mock_request.side_effect = requests.RequestException
 
         client = (
             OpenfoodfactsClient()
@@ -143,7 +147,9 @@ class OpenFoodFactsClientTest(TestCase):
     def test_get_products_by_popularity_return_JSONDecodeError(self, mock_request):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
-        mock_request.side_effect = mock_request.json.JSONDecodeError
+        mock_request.return_value.json.side_effect = mock_request.json.JSONDecodeError(
+            "msg", "nofile", 0
+        )
 
         client = (
             OpenfoodfactsClient()
