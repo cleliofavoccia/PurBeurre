@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Favoris</title>
 </head>
-<body>
 {% extends "base.html" %}
 
 {% block content %}
@@ -17,5 +16,18 @@
                 <hr class="divider my-4" />
         </div>
     </div>
+    </div>
 </header>
+<br >
+<br >
+<div class="container" id="well">
+  <div class="row justify-content-around">
+    <div class="col-2 offset-md-1">
+      <h3><a class="btn btn-default btn-lg" href="{% url 'website:index'%}">Faire une nouvelle recherche</a></h3>
+    </div>
+    <div class="col-2">
+      <h3><a class="btn btn-default btn-lg" href="{% url 'favorites:my_favorites' %}">Aller dans mes favoris</a></h3>
+    </div>
+  </div>
+</div>
 {% endblock content %}

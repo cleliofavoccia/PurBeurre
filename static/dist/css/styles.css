@@ -10214,6 +10214,26 @@ header.masthead-p h1 {
   background: #DCDCDC;
 }
 
+#well {
+  margin-left: 50px;
+  min-height: 25%;
+}
+
+#fail {
+  margin-left: 50px;
+  min-height: 25%;
+}
+
+#out {
+  margin-left: 50px;
+  min-height: 25%;
+}
+
+#address-account {
+  margin-left: 50px;
+  min-height: 25%;
+}
+
 #remy {
   width: 150px;
   height: 150px;

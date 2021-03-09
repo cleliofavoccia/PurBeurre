@@ -18,12 +18,14 @@
         </div>
     </div>
 </header>
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-      <h3 class="btn btn-default btn-lg">Vous êtes déconnecté de la tribu !</h3>
+<br >
+<br >
+<div class="container" id="out">
+  <div class="row justify-content-around">
+    <div class="col-2 offset-md-1">
+      <h3><a class="btn btn-default btn-lg" href="{% url 'website:index'%}">Vous êtes déconnecté de la tribu !</a></h3>
     </div>
-    <div class="col-sm">
+    <div class="col-2">
       <h3><a class="btn btn-default btn-lg" href="{% url 'login'%}">Si vous voulez vous y reconnecter, c'est ici !</a></h3>
     </div>
   </div>
