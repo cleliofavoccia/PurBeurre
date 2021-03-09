@@ -1,0 +1,14 @@
+.auth_form{
+        margin-left: 20%;
+        margin-top: 30px;
+        }
+
+@include media-breakpoint-up(lg){
+    .auth_form{
+        margin-left: 150px;
+        margin-top: 30px;
+        }
+    }
+
+
+

@@ -1,0 +1,24 @@
+.header{
+   background-color: $moule;
+}
+
+
+.product_image {
+     width: 100%;
+     height: 500px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.3;
+}
+
+.product_name{
+     position: absolute;
+     text-align: center;
+     top: 250px;
+     left: 9%;
+     text-transform: uppercase;
+     color: $caramel;
+     opacity: 1;
+}

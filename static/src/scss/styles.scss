@@ -1,0 +1,22 @@
+// Import custom variables and override default Bootstrap variables
+@import "./variables.scss";
+
+// Import Bootstrap
+@import "bootstrap/scss/bootstrap.scss";
+
+// Import custom styles
+@import "./global.scss";
+@import "./navbar.scss";
+@import "./masthead.scss";
+@import "./portfolio.scss";
+
+// Import custom utilities
+@import "./utilities.scss";
+
+// Import custom pages styles
+@import "./base_styles.scss";
+@import "./index_styles.scss";
+@import "./auth_forms_styles.scss";
+@import "./results.scss";
+@import "./_product_detail_styles.scss";
+@import "./product_banner_styles.scss";
