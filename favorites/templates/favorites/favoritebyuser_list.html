@@ -28,8 +28,12 @@
         <div class="col product_list">
             <figure>
                 <h3 class="nutriscore">{{ product.substitute.nutriscore }}</h3>
+                <a id="results" href="{% url 'products:product' product.substitute.pk %}">
                 <img class="results" src="{{ product.substitute.image_url }}" />
-                <p>Pour remplacer : {{ product.product.name}}</p>
+                </a>
+                <a href="{% url 'products:product' product.pk %}">
+                    <p>Pour remplacer : {{ product.product.name}}</p>
+                </a>
             </figure>
         </div>
         {% endfor %}

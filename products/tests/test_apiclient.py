@@ -84,7 +84,9 @@ class OpenFoodFactsClientTest(TestCase):
     no_response = []
 
     @patch('requests.get')
-    def test_get_products_by_popularity_return_good_results(self, mock_request):
+    def test_get_products_by_popularity_return_good_results(
+            self, mock_request
+    ):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
         mock_request.return_value.json.return_value = self.response
@@ -98,15 +100,16 @@ class OpenFoodFactsClientTest(TestCase):
         self.assertEqual(self.results, client)
 
     @patch('requests.get')
-    def test_get_products_by_popularity_have_good_parameters(self, mock_request):
+    def test_get_products_by_popularity_have_good_parameters(
+            self, mock_request
+    ):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
         mock_request.return_value.json.return_value = self.response
 
-        client = (
-            OpenfoodfactsClient()
-            .get_products_by_popularity(self.page_size,
-                                        self.number_of_pages)
+        OpenfoodfactsClient().get_products_by_popularity(
+            self.page_size,
+            self.number_of_pages
         )
 
         mock_request.assert_called_with(
@@ -114,7 +117,9 @@ class OpenFoodFactsClientTest(TestCase):
         )
 
     @patch('requests.get')
-    def test_get_products_by_popularity_return_HTTP_error(self, mock_request):
+    def test_get_products_by_popularity_return_HTTP_error(
+            self, mock_request
+    ):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
         mock_request.return_value.raise_for_status.side_effect = (
@@ -130,7 +135,9 @@ class OpenFoodFactsClientTest(TestCase):
         self.assertEqual(self.no_response, client)
 
     @patch('requests.get')
-    def test_get_products_by_popularity_return_request_exception(self, mock_request):
+    def test_get_products_by_popularity_return_request_exception(
+            self, mock_request
+    ):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
         mock_request.side_effect = requests.RequestException
@@ -144,11 +151,15 @@ class OpenFoodFactsClientTest(TestCase):
         self.assertEqual(self.no_response, client)
 
     @patch('requests.get')
-    def test_get_products_by_popularity_return_JSONDecodeError(self, mock_request):
+    def test_get_products_by_popularity_return_JSONDecodeError(
+            self, mock_request
+    ):
         """Method to test get_products_by_popularity method
         from OpenFoodFactsClient with a mock on requests.get"""
-        mock_request.return_value.json.side_effect = mock_request.json.JSONDecodeError(
-            "msg", "nofile", 0
+        mock_request.return_value.json.side_effect = (
+            mock_request.json.JSONDecodeError(
+                "msg", "nofile", 0
+            )
         )
 
         client = (

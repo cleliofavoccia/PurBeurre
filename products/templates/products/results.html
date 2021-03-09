@@ -9,11 +9,10 @@
 
 {% block content %}
 <!-- Masthead-->
-<header class="product_image" style="background-image: url({{ base_product.image_url }});
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;" >
-    <h1 class="product_name">{{ base_product }}</h1>
+<header class="header">
+    <div class="product_image" style="background-image: url({{ base_product.image_url }});">
+    </div>
+    <div class="product_name"><h1>{{ base_product }}</h1></div>
 </header>
 <br />
 <br />
@@ -25,7 +24,8 @@
         <div class="col product_list">
             <figure>
                 <h3 class="nutriscore">{{ product.nutriscore }}</h3>
-                <a id="results" href="{% url 'products:product' product.pk %}"><img src="{{ product.image_url }}" /></a>
+                <a id="results" href="{% url 'products:product' product.pk %}">
+                    <img class='results' src="{{ product.image_url }}" /></a>
 
                 <form method="POST" action="{% url 'favorites:add_favorites' %}">
                     {% csrf_token %}

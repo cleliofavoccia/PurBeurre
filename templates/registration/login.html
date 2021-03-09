@@ -9,15 +9,15 @@
 <!-- Masthead-->
 
 {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+    <p>Votre pseudonyme et votre mot de passe ne correspondent pas. Veuillez réessayer.</p>
 {% endif %}
 
 {% if next %}
     {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
+      <p>Votre compte n'a pas accès à cette page. Connectez vous avec un compte qui
+      y a accès</p>
     {% else %}
-      <p>Please login to see this page.</p>
+      <p>Veuillez vous connecter pour voir cette page.</p>
     {% endif %}
 {% endif %}
 
@@ -35,8 +35,7 @@
     </div>
 </header>
 <div class="container">
-  <div class="row">
-    <div class="col-sm">
+  <div class="row" style="margin-left:22%;">
       <form class="auth_form" method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="form-group">
@@ -49,14 +48,8 @@
         </div>
         <input id="button-submit" type="submit" class="btn btn-default btn-lg" value="Se connecter" />
         <input type="hidden" name="next" value="{{ next }}" />
+        <h3><a id="button-sign_in" class="btn btn-default btn-lg" href="{% url 'users:sign_in' %}">Toujours pas inscrit ?</a></h3>
   </form>
-    </div>
-    <div class="col-sm">
-      <h3><a id="button-sign_in" class="btn btn-default btn-lg" href="{% url 'users:sign_in' %}">Toujours pas inscrit ?</a></h3>
-    </div>
-    <div class="col-sm">
-        <p><a class="btn btn-default btn-lg" href="{% url 'password_reset' %}">Mot de passe perdu ?</a></p>
-    </div>
   </div>
 </div>
 {% endblock content %}
