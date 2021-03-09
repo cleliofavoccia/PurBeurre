@@ -8,11 +8,10 @@
 <body>
 
 {% block content %}
-<header class="product_image" style="background-image: url({{ product.image_url }});
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;" >
-    <h1 class="product_name">{{ product.name }}</h1>
+<header class="header">
+    <div class="product_image" style="background-image: url({{ product.image_url }});">
+    </div>
+    <div class="product_name"><h1>{{ product.name }}</h1></div>
 </header>
 <br />
 <br />
