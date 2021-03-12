@@ -8,5 +8,4 @@ class CreateUserForm(UserCreationForm):
     """ Sign in forms to permit the users to register him"""
     class Meta:
         model = get_user_model()
-        email = forms.EmailField(required=True)
-        fields = ['username', 'email']
+        fields = ['email']

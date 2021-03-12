@@ -25,11 +25,6 @@
 <form class="auth_form" method="post">
     {% csrf_token %}
     <div class="form-group">
-        <label>Pseudonyme</label>
-        {{ form.username }}
-        <small>Requis. Moins de 150 caractères. Seulement des lettres, numéros et @/./+/-/_ </small>
-    </div>
-    <div class="form-group">
         <label>Adresse email</label>
         {{ form.email }}
         <small>Requis.</small>
